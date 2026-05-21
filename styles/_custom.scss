@@ -245,6 +245,43 @@
   }
 }
 
+// Accordion — chevron on left + stripped styling
+.accordion-chevron-left {
+  .accordion-item {
+    background: transparent;
+    border: none;
+  }
+
+  .accordion-button {
+    background: transparent;
+    box-shadow: none;
+    padding-left: 0;
+    padding-right: 0;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 0.625rem;
+
+    &::after {
+      margin-left: 0;
+    }
+
+    &:not(.collapsed) {
+      background: transparent;
+      box-shadow: none;
+      color: inherit;
+    }
+
+    &:focus {
+      box-shadow: none;
+    }
+  }
+
+  .accordion-body {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
 // Utility
 .text-balance {
   text-wrap: balance;

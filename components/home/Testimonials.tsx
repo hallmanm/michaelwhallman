@@ -3,7 +3,7 @@ import { testimonials } from "@/lib/content/testimonials";
 
 export function Testimonials() {
   return (
-    <section className="section" id="testimonials">
+    <section className="section" id="testimonials" style={{ overflowX: "clip" }}>
       <Container>
         <Row className="mb-5">
           <Col md={8}>
@@ -24,7 +24,7 @@ export function Testimonials() {
                     style={{
                       position: "absolute",
                       top: -16,
-                      right: -12,
+                      right: 8,
                       width: 48,
                       height: 48,
                       borderRadius: "50%",
