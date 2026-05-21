@@ -47,28 +47,55 @@ export function SiteFooter() {
           </Col>
         </Row>
         <Row className="mt-5 pt-4 border-top">
-          <Col md={8} lg={6}>
-            <div className="eyebrow mb-2">Built with AI</div>
+          <Col xs={12}>
+            <div className="eyebrow mb-3">Built with AI</div>
+          </Col>
+          <Col md={6} lg={5} className="mb-4 mb-md-0">
             <div className="d-flex gap-3 mb-3">
               <a href="https://claude.ai/code" target="_blank" rel="noopener noreferrer"
-                className="d-inline-flex align-items-center gap-1 small">
+                className="d-inline-flex align-items-center gap-1 small fw-semibold">
                 <SiClaude size={14} />
                 Claude Code
               </a>
               <a href="https://openai.com/codex" target="_blank" rel="noopener noreferrer"
-                className="d-inline-flex align-items-center gap-1 small">
+                className="d-inline-flex align-items-center gap-1 small fw-semibold">
                 <Cpu size={14} />
                 Codex
               </a>
             </div>
-            <p className="small text-secondary mb-1">
-              This portfolio was designed and built in collaboration with Claude Code and Codex
-              — AI coding assistants from Anthropic and OpenAI. The stack (Next.js 15,
-              Bootstrap 5, TypeScript, Resend, Vercel) was scaffolded, architected, and iterated
-              on through natural-language prompts, with every commit reviewed and directed by me.
-              It reflects how I work today: AI as a force multiplier for engineering output,
-              not a replacement for engineering judgment.
+            <p className="small text-secondary mb-0">
+              This portfolio is itself a demonstration of AI-assisted engineering. Every layer
+              — from initial planning and architecture decisions to final deployment — was
+              built in active collaboration with Claude Code and Codex, with all direction,
+              review, and judgment provided by me.
             </p>
+          </Col>
+          <Col md={6} lg={7}>
+            <Row className="gy-3">
+              {[
+                {
+                  label: "Planning & architecture",
+                  detail: "Requirements, information architecture, tech stack selection, and system design explored through structured AI dialogue before a line of code was written.",
+                },
+                {
+                  label: "Tech stack",
+                  detail: "Next.js 15, Bootstrap 5.3, TypeScript, MDX, Resend, and Vercel selected and scaffolded via natural-language prompts — no boilerplate written by hand.",
+                },
+                {
+                  label: "Iteration & refinement",
+                  detail: "UI components, content data models, case study copy, and demo rewrites iterated rapidly through conversation, with each change committed and reviewed.",
+                },
+                {
+                  label: "CI pipeline & automation",
+                  detail: "GitHub Actions workflow (typecheck, lint, build), branch strategy, and Vercel deployment configuration designed and wired end-to-end without leaving the editor.",
+                },
+              ].map(({ label, detail }) => (
+                <Col key={label} xs={12} sm={6}>
+                  <div className="small fw-semibold mb-1">{label}</div>
+                  <div className="small text-secondary">{detail}</div>
+                </Col>
+              ))}
+            </Row>
           </Col>
         </Row>
         <div className="mt-4 pt-3 border-top d-flex justify-content-between flex-wrap gap-2">
