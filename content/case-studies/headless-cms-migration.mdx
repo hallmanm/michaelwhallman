@@ -1,0 +1,52 @@
+---
+slug: headless-cms-migration
+---
+
+## Problem
+
+AEO ran on **Oracle WebCenter Sites** — a heavyweight, legacy CMS that bottlenecked every
+content change. Marketing teams couldn't ship updates without engineering. The schema was
+locked into the desktop site's needs, which made it brittle for the mobile app and emerging
+headless surfaces. And the editorial experience was bad enough that content authors
+routinely worked around it.
+
+## Approach
+
+I participated in the vendor evaluation, helped select **Contentstack**, and then took
+**technical lead** for the migration. The replatforming was an opportunity to do more than
+swap vendors; it was the moment to rethink the content model itself.
+
+**Architecture work:**
+
+- **JSON schema for device-agnostic consumption** — content modeled once, consumed by web,
+  mobile app, marketing email, and any future channel
+- **Content relationships** designed inside Contentstack so authors composed pages from
+  reusable modules instead of duplicating content per surface
+- **CMS authoring interface** designed for the actual workflow of the editorial team, not the
+  workflow assumed by the CMS
+
+**Custom extensions:**
+
+- Built a **Scene7 preview extension** so content authors could preview media inside
+  Contentstack before publishing — the most-requested workflow improvement from the editorial
+  team
+- Used the Contentstack SDK to integrate the CMS into the build pipeline
+
+## Outcome
+
+- Editorial team unblocked: most content changes now ship in real time
+- A schema and content model that scales across web, app, and future headless surfaces
+- Foundation for the **template generator** work that eliminated a 3-month release cycle for
+  customer-facing content modules
+
+## Technical highlights
+
+- **Contentstack** as the headless CMS — JSON-first, API-driven
+- **Scene7** for media management, integrated via a custom CMS extension
+- **Device-agnostic content model** consumed by web, app, and email channels
+
+## What I led, not just shipped
+
+A CMS migration is mostly a stakeholder management problem. I spent more time aligning
+editorial, marketing, and engineering on the *content model* than I did writing code — and
+that's where the value compounded.

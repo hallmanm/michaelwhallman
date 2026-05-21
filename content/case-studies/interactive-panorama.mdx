@@ -1,0 +1,44 @@
+---
+slug: interactive-panorama
+---
+
+## Problem
+
+AEO's editorial team wanted to ship an immersive product guide — something that broke out of
+the standard category-page grid and let customers explore a styled environment from inside it.
+The challenge: in 2014, browser-native 360° viewers didn't exist. WebGL was experimental. The
+options were Flash, custom JavaScript with severe browser limitations, or a third-party
+embedded player.
+
+## Approach
+
+I leveraged the **PanoVR (Pano2VR) framework** to build a shoppable interactive panoramic
+product guide. The panorama itself was a stitched 360° photograph; on top of it I layered
+clickable hotspots that linked to product detail pages. The result felt like walking through a
+curated retail scene — except every visible product was buyable.
+
+The hotspot data was modeled as a separate JSON config so the editorial team could re-skin
+the experience for future campaigns without touching the player.
+
+## Outcome
+
+- Shipped one of AEO's earliest immersive editorial experiences
+- Established a reusable pattern for hotspot-driven shoppable content
+
+## Technical highlights
+
+- **Pano2VR** as the rendering engine (desktop-targeted; mobile fallback was a flat image)
+- **JSON-driven hotspot config** for editorial reuse across campaigns
+- **XML scene configuration** generated from the design source files
+
+## Demo status
+
+The original implementation depends on the Pano2VR Flash/SWF runtime and is no longer
+functional in modern browsers. The case study preserves the work as screenshots and recorded
+walkthrough video.
+
+## What I led, not just shipped
+
+A reminder that "novel" experiences age fast. The work was state-of-the-art when shipped and
+unusable a decade later. The lesson stuck: when building for a specific runtime, separate
+*content* from *renderer* so the content survives even if the renderer doesn't.

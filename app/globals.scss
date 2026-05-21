@@ -1,0 +1,19 @@
+// 1. Override Bootstrap defaults
+@import "../styles/variables";
+
+// 2. Bootstrap core
+@import "bootstrap/scss/bootstrap";
+
+// 3. Our bespoke styles
+@import "../styles/custom";
+
+// Smooth scrolling for in-page anchors
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-feature-settings: "kern", "ss01";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

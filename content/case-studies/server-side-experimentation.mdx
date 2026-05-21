@@ -1,0 +1,49 @@
+---
+slug: server-side-experimentation
+---
+
+## Problem
+
+Estée Lauder's product teams each ran experimentation in isolation — some on client-side
+tools, others not at all, none on a shared decision-making framework. The brands the company
+runs span dozens of properties: own-brand commerce sites, marketing surfaces, app experiences.
+A client-side-only approach couldn't reach the server-rendered and headless surfaces, and
+shipping experiments through engineering for each one was the bottleneck blocking velocity.
+
+## Approach
+
+I took over the Experimentation team and made two structural changes. First, I **restaffed
+and repositioned the team** around platform thinking instead of project execution — fewer
+one-off implementations, more reusable infrastructure other teams could consume. Second, I
+**directed the development of a server-side experimentation platform** built in Elixir with
+gRPC. The platform exposes a small, opinionated API so any team — Shopify, custom storefronts,
+internal tools — can register an experiment, get a deterministic variant assignment, and emit
+exposure events to the shared analytics pipeline.
+
+In parallel, I **revamped the client-side experimentation program** to focus on throughput.
+Faster QA loops, lighter-weight templates, fewer hand-offs — the goal was to move experiment
+ideas from product brief to results in a fraction of the previous cycle time.
+
+During the Shopify migration I led the effort to **leverage AI** to build integrations that
+let business users self-serve experiments directly from the Shopify UI — translating a
+designer's intent into a valid experiment definition without requiring engineering tickets.
+
+## Outcome
+
+- A reusable platform unblocking experimentation for teams that previously had none
+- Client-side throughput up significantly; decision-making accelerated across the org
+- Business users running their own experiments on Shopify without engineering involvement
+
+## Technical highlights
+
+- **Elixir + gRPC** for the platform: low-latency variant assignment, supervisable, easy to
+  scale horizontally
+- **Deterministic bucketing** keyed on a stable user identifier so server and client always
+  agree on the variant
+- **AI-assisted authoring** layered onto Shopify so business users describe an experiment in
+  natural language and get a structured definition back
+
+## What I led, not just shipped
+
+Repositioning a team is a leadership job, not an engineering one. The technical work mattered,
+but the bigger lever was deciding what the team *wouldn't* do anymore.

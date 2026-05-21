@@ -1,0 +1,51 @@
+---
+slug: personalization-framework
+---
+
+## Problem
+
+AEO had personalization capabilities — Adobe Target plus a Customer Profile system — but
+every personalized experience required engineering work to build, deploy, and maintain. The
+result was that personalization was reserved for a handful of high-stakes campaigns; the long
+tail of personalized merchandising opportunities never got built because the engineering cost
+exceeded the per-feature payoff.
+
+## Approach
+
+I designed and built a **GCP-integrated framework** that let merchandisers and marketers
+create, deploy, and manage **data-driven personalized product widgets** without engineering
+involvement. The framework provided:
+
+- A configuration interface for non-engineers to define widget logic
+- A set of pre-built widget templates (recommended bundles, mystery promos, audience-targeted
+  callouts)
+- Velocity-based custom scripts for generating customer attributes that fed Adobe Target's
+  segmentation
+- An integration with GCP for serving "Mystery Events" — personalized promotional offers
+
+Crucially, the framework was designed so adding a *new* personalized experience took minutes,
+not a release cycle.
+
+## Outcome
+
+- **$12M annual revenue increase** from the cumulative personalization features the framework
+  shipped
+- AEO ranked in **SailThru's Top 100 Retail Personalization Index**
+- Received an **Eagle's Elite award** in recognition
+- Created the **Analytics and Web Optimization team** at AEO around this body of work,
+  spanning AB testing, personalization, analytics tracking, 3rd-party integrations, and tag
+  management
+
+## Technical highlights
+
+- **Adobe Target + Customer Profile** for segmentation and delivery
+- **Velocity** scripts for custom attribute generation, enabling more granular audience
+  targeting
+- **Google Cloud Platform** for serving personalized promo offers (Mystery Events)
+- **Tealium iQ** as the tag management backbone, with a streamlined Universal Data Object
+  improving event-tracking consistency
+
+## What I led, not just shipped
+
+The framework wasn't the win. The win was that *other people* — non-engineers — could ship
+personalization without me. That's how $12M shows up in a year.

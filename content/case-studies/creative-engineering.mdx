@@ -1,0 +1,46 @@
+---
+slug: creative-engineering
+---
+
+## Problem
+
+Before the engineering leadership work, I was the Creative Developer on AEO's marketing team —
+the person responsible for turning a designer's pitch into a working web experience under
+campaign-deadline pressure. The constraints were unusual: browser support that spanned IE8 to
+mobile Safari, designers who wanted print-quality interactive layouts, and timelines measured
+in days. The portfolio that came out of that era is a collection of focused engineering
+problems with creative outcomes.
+
+## Three artifacts
+
+### Stop-motion animation engine
+
+A sprite-based stop-motion system for marketing imagery — the designer authored a sequence of
+frames, and the engine animated them with configurable timing, easing, and loop behavior. Used
+across multiple campaigns. Now lives in its own repo as
+[mwh-stop-motion](https://github.com/michaelwhallman/mwh-stop-motion).
+
+### Parallax storytelling
+
+Parallax scrolling effects for editorial pages — multiple background and foreground layers
+moving at different rates as the user scrolled. The original used skrollr.js; the modern port
+uses [Framer Motion's scroll APIs](/demos/parallax). Same idea, cleaner stack.
+
+### Regex contest validator
+
+A word-count validator built for 77kids' back-to-school contest — restricted entries to a
+configured word limit with live feedback. The original shipped on jQuery; the
+[modern React port](/demos/regex) is functionally identical in under 60 lines.
+
+## What ties them together
+
+All three came from the same posture: **understand the designer's intent, then build the
+smallest thing that delivers it**. None of these are systems — they're focused tools that did
+one job well, and that approach scaled into the later platform-engineering work.
+
+## What I led, not just shipped
+
+This era was where I learned that the technical part is the easy part. The creative-developer
+job was as much *translation* — between design intent, marketing deadlines, and engineering
+reality — as it was code. That translation skill is the one I leaned on hardest when
+transitioning into management.
