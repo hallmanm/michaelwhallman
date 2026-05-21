@@ -92,7 +92,7 @@ export const experience: ExperienceEntry[] = [
   },
   {
     company: "American Eagle Outfitters",
-    role: "Creative Developer — AEO Brand Lead",
+    role: "Creative Developer III — AEO Brand Lead",
     dates: "Apr 2013 – Oct 2013",
     location: "Pittsburgh, PA",
     highlights: [
@@ -102,11 +102,20 @@ export const experience: ExperienceEntry[] = [
   },
   {
     company: "American Eagle Outfitters",
-    role: "Creative Developer — 77kids Brand Lead",
+    role: "Creative Developer II — 77kids Brand Lead",
     dates: "Sep 2011 – Apr 2013",
     location: "Pittsburgh, PA",
     highlights: [
       'Developed a responsive, MVC-based feature showcasing the new cast of AEO models for a back-to-school contest generating $961,067 in revenue and a 77.4% increase in comps — received an "Eagle\'s Elite" award',
+    ],
+  },
+  {
+    company: "American Eagle Outfitters",
+    role: "Creative Developer I",
+    dates: "Mar 2011 – Sep 2011",
+    location: "Pittsburgh, PA",
+    highlights: [
+      'Maintained marketing content across AEO brands.',
     ],
   },
 ];

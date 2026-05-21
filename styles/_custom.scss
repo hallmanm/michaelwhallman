@@ -148,58 +148,132 @@
   }
 }
 
-// Timeline
-.timeline {
-  position: relative;
-  padding-left: 2rem;
+// Career timeline — horizontal scroll cards + date-mapped bars
+.timeline-scroll {
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--bs-border-color) transparent;
 
-  &::before {
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--bs-border-color);
+    border-radius: 3px;
+  }
+}
+
+.timeline-canvas {
+  width: max-content;
+  position: relative;
+}
+
+.timeline-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 1rem 1.25rem 1.5rem;
+  display: flex;
+  gap: 1.25rem;
+  position: relative;
+}
+
+.timeline-card {
+  flex: 0 0 18rem;
+  position: relative;
+  padding-top: 2.5rem;
+  display: flex;
+  flex-direction: column;
+
+  &:not(:last-child) .timeline-card__dot::after {
     content: "";
     position: absolute;
-    left: 0.5rem;
-    top: 0;
-    bottom: 0;
-    width: 1px;
+    top: 50%;
+    left: 100%;
+    width: calc(18rem + 1.25rem - 0.75rem);
+    height: 1px;
     background: var(--bs-border-color);
+    transform: translateY(-50%);
+    z-index: -1;
   }
 
-  &__item {
-    position: relative;
-    padding-bottom: 2.5rem;
-
-    &::before {
-      content: "";
-      position: absolute;
-      left: -1.625rem;
-      top: 0.4rem;
-      width: 0.75rem;
-      height: 0.75rem;
-      border-radius: 50%;
-      background: $primary;
-      border: 2px solid $body-bg;
-    }
-
-    &:last-child {
-      padding-bottom: 0;
-    }
+  &__dot {
+    position: absolute;
+    top: 1.05rem;
+    left: 0;
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    background: $primary;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 1px var(--bs-border-color);
+    z-index: 1;
   }
 
   &__date {
-    font-size: 0.8125rem;
+    font-size: 0.75rem;
     color: var(--bs-secondary-color);
     text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__current {
+    display: inline-block;
+    padding: 0.1rem 0.4rem;
+    background: $primary;
+    color: #ffffff;
+    border-radius: 0.2rem;
+    font-size: 0.625rem;
     letter-spacing: 0.08em;
   }
 
   &__role {
-    font-size: 1.125rem;
+    font-size: 1.0625rem;
     font-weight: 600;
-    margin: 0.25rem 0;
+    line-height: 1.3;
+    margin-bottom: 0.4rem;
   }
 
   &__company {
-    color: var(--bs-secondary-color);
+    color: $primary;
     font-size: 0.9375rem;
+    font-weight: 500;
+    margin-top: auto; // anchors company + location to the bottom of the card
+  }
+
+  &__location {
+    color: var(--bs-secondary-color);
+    font-size: 0.8125rem;
+    margin-top: 0.15rem;
+  }
+}
+
+// Column-spanning bars beneath the cards.
+// Each bar covers the card columns of its own role + more-recent overlapping roles.
+// Stacked vertically: most-recent role at the bottom, oldest at the top.
+.timeline-bars {
+  position: relative;
+  margin-top: 0.75rem;
+  height: 5rem;
+  margin-bottom: 1.5rem; // keeps the bottom-most bar clear of the scrollbar
+}
+
+.timeline-bar {
+  position: absolute;
+  height: 1px;
+  background: $primary;
+  min-width: 2px;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: lighten($primary, 15%);
+  }
+
+  &--current {
+    height: 2px;
   }
 }
 
