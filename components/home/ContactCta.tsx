@@ -17,13 +17,10 @@ export function ContactCta() {
               experimentation, personalization, or scaling engineering teams — drop me a note.
             </p>
             <div className="mt-4">
-              <div className="small text-secondary">Or reach out directly</div>
+              <div className="small text-secondary">Or connect on LinkedIn</div>
               <div className="mt-2">
-                <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
-              </div>
-              <div className="mt-1">
                 <a href={siteConfig.social.linkedin} target="_blank" rel="noopener noreferrer">
-                  LinkedIn →
+                  linkedin.com/in/hallmanm →
                 </a>
               </div>
             </div>

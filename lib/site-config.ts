@@ -8,7 +8,6 @@ export const siteConfig = {
   description:
     "Engineering leader driving $130M+ in measurable revenue through experimentation, personalization, and headless CMS at scale.",
   tagline: "Engineering leader driving $130M+ in measurable revenue through experimentation.",
-  email: "michaelhallman1@gmail.com",
   social: {
     linkedin: "https://www.linkedin.com/in/hallmanm",
     github: "https://github.com/michaelwhallman",

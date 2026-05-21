@@ -38,7 +38,7 @@ export function SiteFooter() {
                 </a>
               </li>
               <li>
-                <a href={`mailto:${siteConfig.email}`}>Email</a>
+                <a href="/contact">Contact</a>
               </li>
             </ul>
           </Col>
