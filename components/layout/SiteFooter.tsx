@@ -43,9 +43,25 @@ export function SiteFooter() {
             </ul>
           </Col>
         </Row>
-        <div className="mt-5 pt-3 border-top d-flex justify-content-between flex-wrap gap-2">
+        <Row className="mt-5 pt-4 border-top">
+          <Col md={8} lg={6}>
+            <div className="eyebrow mb-2">Built with AI</div>
+            <p className="small text-secondary mb-1">
+              This portfolio was designed and built in collaboration with{" "}
+              <a href="https://claude.ai/code" target="_blank" rel="noopener noreferrer">Claude Code</a>
+              {" "}and{" "}
+              <a href="https://openai.com/codex" target="_blank" rel="noopener noreferrer">Codex</a>
+              {" "}— AI coding assistants from Anthropic and OpenAI. The stack (Next.js 15,
+              Bootstrap 5, TypeScript, Resend, Vercel) was scaffolded, architected, and iterated
+              on through natural-language prompts, with every commit reviewed and directed by me.
+              It reflects how I work today: AI as a force multiplier for engineering output,
+              not a replacement for engineering judgment.
+            </p>
+          </Col>
+        </Row>
+        <div className="mt-4 pt-3 border-top d-flex justify-content-between flex-wrap gap-2">
           <span suppressHydrationWarning>© {new Date().getFullYear()} {siteConfig.name}</span>
-          <span>Built with Next.js</span>
+          <span className="text-secondary small">Next.js · Bootstrap · Claude Code · Codex</span>
         </div>
       </Container>
     </footer>
