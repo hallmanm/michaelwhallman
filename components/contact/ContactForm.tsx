@@ -12,7 +12,11 @@ type Status =
   | { state: "success" }
   | { state: "error"; message: string };
 
-export function ContactForm() {
+interface ContactFormProps {
+  compact?: boolean;
+}
+
+export function ContactForm({ compact = false }: ContactFormProps) {
   const [status, setStatus] = useState<Status>({ state: "idle" });
   const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
@@ -55,14 +59,17 @@ export function ContactForm() {
     );
   }
 
+  const inputSize = compact ? "sm" : undefined;
+
   return (
     <Form onSubmit={handleSubmit(onSubmit)} noValidate>
-      <Row className="g-3">
+      <Row className={compact ? "g-2" : "g-3"}>
         <Col md={6}>
           <Form.Group controlId="contact-name">
-            <Form.Label>Name</Form.Label>
+            <Form.Label className={compact ? "small" : undefined}>Name</Form.Label>
             <Form.Control
               type="text"
+              size={inputSize}
               autoComplete="name"
               isInvalid={!!errors.name}
               {...register("name")}
@@ -72,9 +79,10 @@ export function ContactForm() {
         </Col>
         <Col md={6}>
           <Form.Group controlId="contact-email">
-            <Form.Label>Email</Form.Label>
+            <Form.Label className={compact ? "small" : undefined}>Email</Form.Label>
             <Form.Control
               type="email"
+              size={inputSize}
               autoComplete="email"
               isInvalid={!!errors.email}
               {...register("email")}
@@ -84,31 +92,36 @@ export function ContactForm() {
         </Col>
         <Col md={6}>
           <Form.Group controlId="contact-company">
-            <Form.Label>
+            <Form.Label className={compact ? "small" : undefined}>
               Company <span className="text-secondary">(optional)</span>
             </Form.Label>
             <Form.Control
               type="text"
+              size={inputSize}
               autoComplete="organization"
-              isInvalid={!!errors.company}
               {...register("company")}
             />
           </Form.Group>
         </Col>
         <Col md={6}>
           <Form.Group controlId="contact-role">
-            <Form.Label>
-              Role you&apos;re hiring for <span className="text-secondary">(optional)</span>
+            <Form.Label className={compact ? "small" : undefined}>
+              Role <span className="text-secondary">(optional)</span>
             </Form.Label>
-            <Form.Control type="text" isInvalid={!!errors.role} {...register("role")} />
+            <Form.Control
+              type="text"
+              size={inputSize}
+              {...register("role")}
+            />
           </Form.Group>
         </Col>
         <Col xs={12}>
           <Form.Group controlId="contact-message">
-            <Form.Label>Message</Form.Label>
+            <Form.Label className={compact ? "small" : undefined}>Message</Form.Label>
             <Form.Control
               as="textarea"
-              rows={5}
+              size={inputSize}
+              rows={compact ? 3 : 5}
               isInvalid={!!errors.message}
               {...register("message")}
             />
@@ -140,7 +153,7 @@ export function ContactForm() {
           <Button
             type="submit"
             variant="dark"
-            size="lg"
+            size={compact ? "sm" : "lg"}
             disabled={status.state === "submitting"}
           >
             {status.state === "submitting" ? (

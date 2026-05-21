@@ -4,7 +4,6 @@ import { FeaturedWork } from "@/components/home/FeaturedWork";
 import { Timeline } from "@/components/home/Timeline";
 import { Testimonials } from "@/components/home/Testimonials";
 import { Recognition } from "@/components/home/Recognition";
-import { ContactCta } from "@/components/home/ContactCta";
 
 export default function HomePage() {
   return (
@@ -15,7 +14,6 @@ export default function HomePage() {
       <Timeline />
       <Testimonials />
       <Recognition />
-      <ContactCta />
     </>
   );
 }
