@@ -50,8 +50,8 @@ export const caseStudies: CaseStudy[] = [
     role: "Engineering Program Lead — Analytics & AB Testing",
     dates: "2018 – 2023",
     headline:
-      "Led the engineering effort behind multiple experiments each driving >4% conversion lift — including a social-proof + GCP-feed program that projected to $130M in additional annual revenue.",
-    outcome: "$130M+ annual revenue",
+      "Led engineering for AEO's AB testing program — including a social-proof campaign backed by a GCP data feed that drove >4% conversion lift across multiple checkout variants.",
+    outcome: "$130M+ projected annual revenue lift",
     category: "Business Value",
     image: "/case-studies/ab_lg.png",
     topics: ["experimentation", "leadership"],
@@ -65,7 +65,7 @@ export const caseStudies: CaseStudy[] = [
     dates: "2016 – 2018",
     headline:
       "As the IC owner of personalization engineering, built a data-driven framework on Adobe Target, the Customer Profile, Velocity templates, and GCP — letting business users ship personalized widgets in minutes.",
-    outcome: "$12M annual revenue",
+    outcome: "Landed AEO in SailThru's Top 100 Retail Personalization Index",
     category: "Business Value",
     image: "/case-studies/just_for_you_lg.jpg",
     topics: ["personalization"],
@@ -78,8 +78,8 @@ export const caseStudies: CaseStudy[] = [
     role: "Lead Creative Developer",
     dates: "2015 – 2016",
     headline:
-      "Took over AEO's outsourced AB testing program from Brooks Bell — proved out the in-house model and terminated the contract for ~$300K in annual savings.",
-    outcome: "$300K annual savings",
+      "Took over AEO's outsourced AB testing program from Brooks Bell and proved the in-house model could carry the full workload — making the contract termination an easy call.",
+    outcome: "AB testing moved fully in-house",
     category: "Business Value",
     image: "/case-studies/brooksbell_lg.png",
     topics: ["experimentation", "leadership"],
@@ -92,7 +92,7 @@ export const caseStudies: CaseStudy[] = [
     dates: "2018 – 2023",
     headline:
       "Grew the experimentation team from a one-person operation into a 20+ person, fully staffed program — and earned an increased budget at a moment of company-wide cuts.",
-    outcome: "1 engineer → 20+ person staffed team",
+    outcome: "Budget increased during a period of company-wide cuts",
     category: "Leadership",
     image: "/case-studies/awo_lg.jpg",
     topics: ["leadership"],
@@ -130,8 +130,8 @@ export const caseStudies: CaseStudy[] = [
     role: "Manager — UI Engineering",
     dates: "2018 – 2023",
     headline:
-      "Built an 8-week, project-based internship program that gave interns real codebase contributions and team exposure — adopted by HR as a model for other departments.",
-    outcome: "Adopted by HR as a model program",
+      "Built an 8-week, project-based internship program that gave interns real codebase contributions and cross-team exposure — replacing the typical busywork model.",
+    outcome: "Adopted by HR as a model for other departments",
     category: "Leadership",
     image: "/case-studies/internship.jpg",
     topics: ["leadership"],
@@ -157,8 +157,8 @@ export const caseStudies: CaseStudy[] = [
     role: "Content Architect",
     dates: "2021",
     headline:
-      "A dynamic template engine inside Contentstack that consolidated 50+ marketing content modules into one configurable 'Master Module' — moving template creation from months to minutes.",
-    outcome: "~3 months saved per template request",
+      "A dynamic template engine inside Contentstack that consolidated 50+ marketing content modules into one configurable interface — giving business users direct control over template creation.",
+    outcome: "~3 months saved per new template",
     category: "Development",
     image: "/case-studies/master_module_lg.jpg",
     topics: ["cms", "tooling"],
@@ -172,7 +172,7 @@ export const caseStudies: CaseStudy[] = [
     dates: "2013",
     headline:
       "Built a custom JSON authoring app — drag-and-drop reorder, live preview, scheduled publishing, Git-integrated deploys — that let business users update AEO and Aerie app content without a release.",
-    outcome: "App content updates without engineering involvement",
+    outcome: "Proposed headless content delivery before the term existed",
     category: "Development",
     image: "/case-studies/cms_lg.jpg",
     topics: ["cms", "tooling"],
@@ -200,7 +200,7 @@ export const caseStudies: CaseStudy[] = [
     dates: "2014",
     headline:
       "A scroll-driven parallax experience exploring layered narrative on the AEO marketing site.",
-    outcome: "Reusable proof of concept for future immersive features",
+    outcome: "Established scroll-driven narrative as a viable AEO editorial pattern",
     category: "Development",
     image: "/case-studies/parallax.jpg",
     topics: ["creative"],
