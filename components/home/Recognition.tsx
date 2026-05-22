@@ -24,9 +24,9 @@ export function Recognition() {
       <Container>
         <Row className="mb-5">
           <Col md={8}>
-            <span className="eyebrow">Recognition</span>
+            <span className="eyebrow">Awards and certifications</span>
             <h2 className="display-headline display-5 text-balance">
-              Awards and certifications.
+              Recognition
             </h2>
           </Col>
         </Row>

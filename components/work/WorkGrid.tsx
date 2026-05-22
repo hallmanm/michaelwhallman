@@ -33,6 +33,7 @@ export function WorkGrid() {
           <button
             key={cat}
             onClick={() => toggle(cat)}
+            aria-pressed={selected.has(cat)}
             className={`work-filter-tag${selected.has(cat) ? " work-filter-tag--active" : ""}`}
           >
             {cat}
@@ -47,7 +48,7 @@ export function WorkGrid() {
                 {cs.company}
                 <span className="work-card__tag">{cs.category}</span>
               </div>
-              <div className="work-card__title text-balance">{cs.title}</div>
+              <h3 className="work-card__title text-balance">{cs.title}</h3>
               <p className="text-secondary mb-0">{cs.headline}</p>
               <div className="work-card__outcome">{cs.outcome}</div>
             </Link>

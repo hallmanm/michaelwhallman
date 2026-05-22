@@ -19,8 +19,7 @@ export function Testimonials() {
               <div className="testimonial-card" style={{ position: "relative" }}>
                 {t.photo && (
                   <div
-                    role="img"
-                    aria-label={t.name}
+                    aria-hidden="true"
                     style={{
                       position: "absolute",
                       top: -16,

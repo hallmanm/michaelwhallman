@@ -25,12 +25,12 @@ export function Hero() {
               <span style={{ fontStyle: "italic" }}>$130M+</span> in measurable revenue through experimentation.
             </h1>
             <p className="lead text-balance" style={{ maxWidth: "44rem" }}>
-              Fifteen years in ecommerce engineering — building experimentation platforms, personalization
-              frameworks, and headless content systems. Currently leading the Experimentation team at Estée
-              Lauder.
+              Fifteen years in ecommerce engineering — building A/B testing programs, conversion optimization
+              platforms, and personalization systems that connect engineering decisions to measurable revenue.
+              Currently leading the Experimentation team at Estée Lauder.
             </p>
             <div className="d-flex flex-wrap gap-3 mt-4">
-              <Link href={siteConfig.social.linkedin} className="btn btn-dark btn-lg d-inline-flex align-items-center gap-2" target="_blank" rel="noopener noreferrer">
+              <Link href={siteConfig.social.linkedin} className="btn btn-dark btn-lg d-inline-flex align-items-center gap-2" target="_blank" rel="noopener noreferrer" aria-label="Let's Connect on LinkedIn (opens in new tab)">
                 <LinkedInIcon />
                 Let&apos;s Connect
               </Link>

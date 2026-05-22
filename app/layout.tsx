@@ -19,12 +19,26 @@ const instrumentSerif = Instrument_Serif({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} — ${siteConfig.role}`,
+    default: `${siteConfig.name} — Engineering Manager & Experimentation Leader`,
     template: `%s — ${siteConfig.name}`,
   },
   description: siteConfig.description,
+  keywords: [
+    "Engineering Manager",
+    "Engineering Director",
+    "Head of Experimentation",
+    "A/B Testing",
+    "CRO",
+    "Conversion Rate Optimization",
+    "Growth Engineering",
+    "Experimentation Platform",
+    "Personalization",
+    "ecommerce engineering",
+    "Michael Hallman",
+    "Michael W. Hallman",
+  ],
   openGraph: {
-    title: `${siteConfig.name} — ${siteConfig.role}`,
+    title: `${siteConfig.name} — Engineering Manager & Experimentation Leader`,
     description: siteConfig.description,
     url: siteConfig.url,
     siteName: siteConfig.name,
@@ -32,7 +46,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.name} — ${siteConfig.role}`,
+    title: `${siteConfig.name} — Engineering Manager & Experimentation Leader`,
     description: siteConfig.description,
   },
 };

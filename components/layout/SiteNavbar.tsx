@@ -22,9 +22,9 @@ export function SiteNavbar() {
   }, [pathname]);
 
   return (
-    <Navbar expand="md" expanded={expanded} onToggle={setExpanded} className="site-navbar sticky-top" aria-label="Primary">
+    <Navbar expand="md" expanded={expanded} onToggle={setExpanded} className="site-navbar sticky-top" aria-label="Main navigation">
       <Container>
-        <Navbar.Brand as={Link} href="/" aria-label={siteConfig.name}>
+        <Navbar.Brand as={Link} href="/" aria-label={`${siteConfig.name} — home`}>
           <Logo />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="primary-nav" />

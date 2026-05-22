@@ -13,10 +13,10 @@ export function ImpactStrip() {
         <Row className="gy-4">
           {impactStats.map((stat) => (
             <Col key={stat.label} xs={6} md={3}>
-              <div className="impact-stat">
-                <div className="impact-stat__value">{stat.value}</div>
-                <div className="impact-stat__label">{stat.label}</div>
-              </div>
+              <dl className="impact-stat">
+                <dd className="impact-stat__value">{stat.value}</dd>
+                <dt className="impact-stat__label">{stat.label}</dt>
+              </dl>
             </Col>
           ))}
         </Row>

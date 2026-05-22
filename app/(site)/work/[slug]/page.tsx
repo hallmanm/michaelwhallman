@@ -144,7 +144,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
                 <Col key={other.slug} md={4}>
                   <Link href={`/work/${other.slug}`} className="work-card">
                     <div className="work-card__meta">{other.company}</div>
-                    <div className="work-card__title text-balance">{other.title}</div>
+                    <h3 className="work-card__title text-balance">{other.title}</h3>
                   </Link>
                 </Col>
               ))}

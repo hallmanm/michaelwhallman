@@ -10,8 +10,7 @@ export function FooterContact() {
         <div className="eyebrow d-block mb-3">Get in touch</div>
         <div className="d-flex align-items-start gap-3 mb-4">
           <div
-            role="img"
-            aria-label={siteConfig.name}
+            aria-hidden="true"
             style={{
               width: 64,
               height: 64,

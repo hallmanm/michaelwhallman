@@ -17,8 +17,8 @@ const WORK_STYLE_ICON: Record<WorkStyle, React.ReactNode> = {
 };
 
 export const metadata = {
-  title: "Resume",
-  description: `Resume of ${siteConfig.name}.`,
+  title: "Resume — Engineering Manager, A/B Testing & Experimentation",
+  description: `Resume of ${siteConfig.name} — Engineering Manager with 15+ years leading A/B testing programs, CRO initiatives, and growth engineering teams in ecommerce.`,
 };
 
 const skills = {

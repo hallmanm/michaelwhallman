@@ -2,8 +2,8 @@ import { Container, Row, Col } from "react-bootstrap";
 import { WorkGrid } from "@/components/work/WorkGrid";
 
 export const metadata = {
-  title: "Work",
-  description: "Case studies in experimentation, personalization, headless CMS, and engineering leadership.",
+  title: "Case Studies — Engineering Leadership, A/B Testing & CRO",
+  description: "Case studies spanning A/B testing program leadership, conversion rate optimization, personalization frameworks, and growth engineering across 15 years in ecommerce.",
 };
 
 export default function WorkIndexPage() {
