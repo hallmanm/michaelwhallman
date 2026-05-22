@@ -44,14 +44,13 @@ export async function POST(request: Request) {
   }
 
   const resend = new Resend(apiKey);
-  const { name, email, company, role, message } = parsed.data;
+  const { name, email, company, message } = parsed.data;
 
   const subject = `[Portfolio] ${name}${company ? ` — ${company}` : ""}`;
   const text = [
     `Name: ${name}`,
     `Email: ${email}`,
     company ? `Company: ${company}` : null,
-    role ? `Role: ${role}` : null,
     "",
     message,
   ]
@@ -65,7 +64,6 @@ export async function POST(request: Request) {
         <tr><td style="padding: 4px 12px 4px 0; color: #666;">Name</td><td>${escapeHtml(name)}</td></tr>
         <tr><td style="padding: 4px 12px 4px 0; color: #666;">Email</td><td><a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></td></tr>
         ${company ? `<tr><td style="padding: 4px 12px 4px 0; color: #666;">Company</td><td>${escapeHtml(company)}</td></tr>` : ""}
-        ${role ? `<tr><td style="padding: 4px 12px 4px 0; color: #666;">Role</td><td>${escapeHtml(role)}</td></tr>` : ""}
       </table>
       <p style="margin-top: 1.5rem; white-space: pre-wrap;">${escapeHtml(message)}</p>
     </div>
