@@ -181,8 +181,10 @@
   flex: 0 0 18rem;
   position: relative;
   padding-top: 2.5rem;
+  padding-right: 1.25rem;
   display: flex;
   flex-direction: column;
+  border-right: 1px solid var(--bs-border-color);
 
   &:not(:last-child) .timeline-card__dot::after {
     content: "";
@@ -220,6 +222,14 @@
     gap: 0.5rem;
   }
 
+  &__duration {
+    color: var(--bs-secondary-color);
+    opacity: 0.7;
+    font-size: 0.625rem;
+    letter-spacing: 0.04em;
+    margin-left: auto;
+  }
+
   &__current {
     display: inline-block;
     padding: 0.1rem 0.4rem;
@@ -235,6 +245,13 @@
     font-weight: 600;
     line-height: 1.3;
     margin-bottom: 0.4rem;
+  }
+
+  &__role-sub {
+    display: block;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    line-height: 1.3;
   }
 
   &__company {

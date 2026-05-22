@@ -4,12 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { siteConfig } from "@/lib/site-config";
+import { Logo } from "@/components/logo/Logo";
 
 const links = [
   { href: "/work", label: "Work" },
-  { href: "/about", label: "About" },
   { href: "/resume", label: "Resume" },
-  { href: "/#contact", label: "Contact" },
+  { href: "#contact", label: "Contact" },
 ];
 
 export function SiteNavbar() {
@@ -18,8 +18,8 @@ export function SiteNavbar() {
   return (
     <Navbar expand="md" className="site-navbar sticky-top" aria-label="Primary">
       <Container>
-        <Navbar.Brand as={Link} href="/">
-          {siteConfig.shortName}
+        <Navbar.Brand as={Link} href="/" aria-label={siteConfig.name}>
+          <Logo />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="primary-nav" />
         <Navbar.Collapse id="primary-nav">

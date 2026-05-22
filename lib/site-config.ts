@@ -1,6 +1,5 @@
 export const siteConfig = {
   name: "Michael W. Hallman",
-  shortName: "Michael Hallman",
   role: "Sr. Engineering Manager",
   currentCompany: "Estée Lauder",
   location: "Pittsburgh, PA",

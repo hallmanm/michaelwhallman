@@ -16,14 +16,6 @@ export const testimonials: Testimonial[] = [
       "Michael joined AEO as a frontend developer, working on websets late into the night with our scrappy development team at the time. Since then, Michael has grown into a leader and become a champion for optimization in the webset space as a key player in our Content Strategy team. He was highly influential most recently in leading content architecture with Contentstack, developing a foundation hands-on for our solution to grow and scale for all shopping channels. He has also been a passionate leader in the A/B testing and experimentation area, pioneering efforts to mature our capabilities and integrations through Tealium, Google Optimize, and this year with our switch to Optimizely. Michael was always a strong advocate for his team and the work to better the experiences for our AEO customer.",
   },
   {
-    name: "Lyndsay Molinaro",
-    title: "Sr. Manager of Portfolio and Release Management",
-    company: "American Eagle Outfitters",
-    photo: "/linkedin/lyndsay.jpg",
-    quote:
-      "I have worked with Michael Hallman for 13 years at American Eagle. He has really grown over the years from starting as a UI developer to building out an entire AB Testing team and process at American Eagle. I highly recommend Michael as a fantastic leader, co-worker, and innovator in his area of expertise.",
-  },
-  {
     name: "Ashley Dickey",
     title: "Lead Product Manager",
     company: "American Eagle Outfitters",
@@ -46,6 +38,14 @@ export const testimonials: Testimonial[] = [
     photo: "/linkedin/mackenzie.jpg",
     quote:
       "I have had the pleasure of working with Mike for 7 years. His knowledge & insights were always consistent and clear that helped our developer-designer relationship be a supportive and innovative one. He is always open to new ideas and a team player in making those ideas come to life with the lowest possible effort and the highest reward for both the business and the customer. From a designer's perspective, Mike is an ideal teammate for pushing boundaries and launching successful digital products.",
+  },
+  {
+    name: "Lyndsay Molinaro",
+    title: "Sr. Manager of Portfolio and Release Management",
+    company: "American Eagle Outfitters",
+    photo: "/linkedin/lyndsay.jpg",
+    quote:
+      "I have worked with Michael Hallman for 13 years at American Eagle. He has really grown over the years from starting as a UI developer to building out an entire AB Testing team and process at American Eagle. I highly recommend Michael as a fantastic leader, co-worker, and innovator in his area of expertise.",
   },
   {
     name: "Shawn Hazen",

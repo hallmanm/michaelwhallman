@@ -1,5 +1,6 @@
 import { Col, Container, Row } from "react-bootstrap";
-import { awards, certifications } from "@/lib/content/awards";
+import { awards } from "@/lib/content/awards";
+import { certifications } from "@/lib/content/certifications";
 
 export function Recognition() {
   return (

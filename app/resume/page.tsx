@@ -1,7 +1,20 @@
+import { Building2, Laptop } from "lucide-react";
 import { Col, Container, Row } from "react-bootstrap";
 import { siteConfig } from "@/lib/site-config";
-import { experience } from "@/lib/content/experience";
-import { certifications } from "@/lib/content/awards";
+import { experience, WorkStyle } from "@/lib/content/experience";
+import { certifications } from "@/lib/content/certifications";
+
+const WORK_STYLE_LABEL: Record<WorkStyle, string> = {
+  "in-office": "In office",
+  hybrid: "Hybrid",
+  remote: "Remote",
+};
+
+const WORK_STYLE_ICON: Record<WorkStyle, React.ReactNode> = {
+  "in-office": <Building2 size={13} />,
+  hybrid: <span style={{ display: "inline-flex", alignItems: "center", gap: 2 }}><Laptop size={13} /><span style={{ fontSize: "0.6rem", lineHeight: 1 }}>/</span><Building2 size={13} /></span>,
+  remote: <Laptop size={13} />,
+};
 
 export const metadata = {
   title: "Resume",
@@ -83,12 +96,34 @@ export default function ResumePage() {
 
             <h2>Experience</h2>
             {experience.map((entry) => (
-              <div key={`${entry.company}-${entry.dates}`} className="mb-4">
-                <div className="d-flex justify-content-between align-items-baseline flex-wrap">
-                  <h3 className="h5 mb-1">
-                    {entry.role} <span className="text-secondary fw-normal">— {entry.company}</span>
+              <div key={`${entry.company}-${entry.startDate}`} className="mb-5">
+                <div className="d-flex justify-content-between align-items-baseline gap-2">
+                  <h3 className={`h5 ${entry.roleSubtitle ? "mb-1" : "mb-0"}`}>
+                    <span className="d-inline-flex align-items-center gap-2">
+                      <span>
+                        <span style={{ whiteSpace: "nowrap" }}>{entry.role}</span>
+                        {entry.roleSubtitle && (
+                          <>
+                            <span className="d-none d-md-inline"> — {entry.roleSubtitle}</span>
+                            <span className="d-block d-md-none" style={{ whiteSpace: "nowrap" }}>{entry.roleSubtitle}</span>
+                          </>
+                        )}
+                      </span>
+                      <span className="text-secondary fw-normal d-none d-md-inline" style={{ whiteSpace: "nowrap" }}>| {entry.company}</span>
+                    </span>
                   </h3>
-                  <span className="text-secondary small">{entry.dates}</span>
+                  <span className="text-secondary flex-shrink-0" style={{ fontSize: "0.75rem" }}>{entry.startDate} – {entry.endDate}</span>
+                </div>
+                <div className="d-md-none d-flex justify-content-between align-items-baseline mb-1 gap-2">
+                  <span className="text-secondary" style={{ fontSize: "0.9rem" }}>{entry.company}</span>
+                  <span className="text-secondary d-inline-flex align-items-center gap-1 flex-shrink-0" style={{ fontSize: "0.8125rem" }}>
+                    <span title={WORK_STYLE_LABEL[entry.workStyle]}>{WORK_STYLE_ICON[entry.workStyle]}</span>
+                    {entry.location}
+                  </span>
+                </div>
+                <div className="text-secondary mb-2 d-none d-md-inline-flex align-items-center gap-2" style={{ fontSize: "0.8125rem" }}>
+                  <span title={WORK_STYLE_LABEL[entry.workStyle]}>{WORK_STYLE_ICON[entry.workStyle]}</span>
+                  {entry.location}
                 </div>
                 <ul className="ps-3">
                   {entry.highlights.map((h, i) => (

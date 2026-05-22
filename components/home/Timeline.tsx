@@ -6,22 +6,36 @@ const MONTH_MAP: Record<string, number> = {
   Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11,
 };
 
-function parseMonthYear(s: string): Date {
+function parseDate(s: string): Date | null {
   const trimmed = s.trim();
   if (/^present$/i.test(trimmed)) return new Date();
   const m = trimmed.match(/(\w+)\s+(\d{4})/);
-  if (!m) return new Date();
-  return new Date(parseInt(m[2], 10), MONTH_MAP[m[1]] ?? 0, 1);
+  if (m) return new Date(parseInt(m[2], 10), MONTH_MAP[m[1]] ?? 0, 1);
+  const y = trimmed.match(/^(\d{4})$/);
+  if (y) return new Date(parseInt(y[1], 10), 0, 1);
+  return null;
 }
 
 const roles = experience.map((e) => {
-  const [startStr, endStr] = e.dates.split(/\s*[–-]\s*/);
+  const start = parseDate(e.startDate);
+  const end = parseDate(e.endDate);
   return {
     ...e,
-    start: parseMonthYear(startStr),
-    end: parseMonthYear(endStr ?? "Present"),
+    start: start ?? new Date(),
+    end: end ?? new Date(),
+    durationValid: start !== null && end !== null,
   };
 });
+
+function formatDuration(start: Date, end: Date): string {
+  const totalMonths =
+    (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+  const years = Math.floor(totalMonths / 12);
+  const months = totalMonths % 12;
+  if (years === 0) return `${months}mo`;
+  if (months === 0) return `${years}yr`;
+  return `${years}yr ${months}mo`;
+}
 
 function rolesOverlap(a: typeof roles[number], b: typeof roles[number]): boolean {
   return a.start < b.end && b.start < a.end;
@@ -49,7 +63,7 @@ export function Timeline() {
           <Col md={8}>
             <span className="eyebrow">Career</span>
             <h2 className="display-headline display-5 text-balance">
-              From Creative Developer to Senior Engineering Manager.
+              From {roles[roles.length - 1].role} to {roles[0].role}.
             </h2>
           </Col>
         </Row>
@@ -58,13 +72,17 @@ export function Timeline() {
         <div className="timeline-canvas">
           <ol className="timeline-list">
             {roles.map((r) => (
-              <li key={`${r.company}-${r.dates}`} className="timeline-card">
+              <li key={`${r.company}-${r.startDate}`} className="timeline-card">
                 <div className="timeline-card__dot" />
                 <div className="timeline-card__date">
-                  {r.current ? r.dates.replace(/Present\s*$/i, "") : r.dates}
+                  {r.current ? r.startDate + " –" : `${r.startDate} – ${r.endDate}`}
                   {r.current && <span className="timeline-card__current">Present</span>}
+                  {r.durationValid && <span className="timeline-card__duration">{formatDuration(r.start, r.end)}</span>}
                 </div>
-                <div className="timeline-card__role">{r.role}</div>
+                <div className="timeline-card__role">
+                  {r.role}
+                  {r.roleSubtitle && <span className="timeline-card__role-sub">{r.roleSubtitle}</span>}
+                </div>
                 <div className="timeline-card__company">{r.company}</div>
                 <div className="timeline-card__location">{r.location}</div>
               </li>
@@ -75,14 +93,14 @@ export function Timeline() {
               const { minIdx, span } = getColumnSpan(i);
               return (
                 <div
-                  key={`bar-${r.company}-${r.dates}`}
+                  key={`bar-${r.company}-${r.startDate}`}
                   className={`timeline-bar${r.current ? " timeline-bar--current" : ""}`}
                   style={{
-                    bottom: `${i * 0.5}rem`,
+                    top: `${i * 0.5}rem`,
                     left: `calc(${minIdx} * (18rem + 1.25rem) + 1.5rem)`,
                     width: `calc(${span} * (18rem + 1.25rem) + 18rem)`,
                   }}
-                  title={`${r.role} · ${r.dates}`}
+                  title={`${r.role} · ${r.startDate} – ${r.endDate}`}
                 />
               );
             })}
