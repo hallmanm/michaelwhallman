@@ -16,6 +16,12 @@ function parseDate(s: string): Date | null {
   return null;
 }
 
+function hasMonthValue(s: string): boolean {
+  const trimmed = s.trim();
+  if (/^present$/i.test(trimmed)) return true;
+  return /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+\d{4}$/.test(trimmed);
+}
+
 const roles = experience.map((e) => {
   const start = parseDate(e.startDate);
   const end = parseDate(e.endDate);
@@ -23,7 +29,7 @@ const roles = experience.map((e) => {
     ...e,
     start: start ?? new Date(),
     end: end ?? new Date(),
-    durationValid: start !== null && end !== null,
+    durationValid: start !== null && end !== null && hasMonthValue(e.startDate) && hasMonthValue(e.endDate),
   };
 });
 

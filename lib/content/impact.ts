@@ -13,5 +13,5 @@ export const impactStats: ImpactStat[] = [
   { value: `${careerYears} yrs`, label: "In engineering" },
   { value: `${leadershipYears} yrs`, label: "In leadership" },
   { value: "30+", label: "Engineers led" },
-  { value: "7+", label: "Engineering teams led" },
+  { value: "7+", label: "Teams led" },
 ];
