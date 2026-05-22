@@ -101,19 +101,6 @@ export function ContactForm({ compact = false }: ContactFormProps) {
               />
             </Form.Group>
           </Col>
-          <Col md={6}>
-            <Form.Group controlId="contact-role">
-              <Form.Label className={compact ? "small" : undefined}>
-                Role <span className="text-secondary">(optional)</span>
-              </Form.Label>
-              <Form.Control
-                type="text"
-                size={inputSize}
-                disabled={submitting}
-                {...register("role")}
-              />
-            </Form.Group>
-          </Col>
           <Col xs={12}>
             <Form.Group controlId="contact-message">
               <Form.Label className={compact ? "small" : undefined}>Message</Form.Label>
