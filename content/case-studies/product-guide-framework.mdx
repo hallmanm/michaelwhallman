@@ -1,0 +1,31 @@
+---
+slug: product-guide-framework
+---
+
+## Problem
+
+AEO's category pages needed varied, evolving "product guide" presentations — like the **Jean Guide** — to showcase products in context. Every new guide started life as a custom engineering build: spec, develop, QA, deploy. The design team had ideas faster than engineering could ship them, and the result was a backlog of guide concepts that never made it to production.
+
+## Approach
+
+I built a **JSON-driven product guide framework** that flipped the workflow. Engineering shipped the framework once; the design team and business users configured the guides themselves.
+
+The core ideas:
+
+- **Data-driven layout.** Each guide is a JSON document — products, copy, settings — that the framework parses and renders into a fully responsive presentation.
+- **Multiple attributes per slot.** The schema is rich enough to accommodate variations (size, position, animation, copy) so the same framework powers very different-looking guides.
+- **Authoring without engineers.** Once the framework was in place, business users and the design team could create, adjust, and maintain product guides without filing engineering tickets.
+
+One showcase implementation was a **stop-motion animation built from image sprites** — the framework powered the configuration, and a sprite-driven approach gave the look of stop-motion without the cost (or playback overhead) of video. The animation speed, intervals, intro behavior, preview window size, and fade behavior were all configurable via a simple settings form.
+
+## Outcome
+
+- Product guides shipped on the design team's tempo, not engineering's
+- Engineering freed to work on higher-leverage problems
+- A reusable foundation that powered several AEO category-page experiences
+
+## What this says about how I build
+
+The pattern here — make engineering's output configurable so non-engineers can iterate without filing tickets — became my go-to lever. It shows up again in the Master Module case study, the personalization framework, and the in-house headless CMS. The tradeoff is upfront design cost; the payoff is a permanently shorter cycle time.
+
+The demo shows the stop-motion implementation with live configuration controls, so you can adjust the framework's settings and see the output update in real time.

@@ -1,0 +1,36 @@
+---
+slug: headless-cms-app
+---
+
+## Problem
+
+AEO and Aerie's mobile apps had a structural problem: any change to marketing content required an app release. New campaigns, seasonal promos, and time-sensitive updates were all blocked behind the release train. The business wanted to move at marketing speed; the apps moved at app-store-review speed.
+
+## Approach
+
+I proposed and built what the industry now calls **headless content delivery** — back in 2013, before that label existed.
+
+The architecture had two pieces:
+
+**1. A backwards-compatible JSON contract.** I designed a JSON structure for the marketing content that could be extended without breaking older app versions. This was the critical constraint: users who hadn't updated the app couldn't be allowed to experience a broken UI.
+
+**2. An in-house authoring application.** Hand-editing JSON wasn't a viable workflow for business users, so I built a custom app that wrapped the JSON in something humans wanted to use:
+
+- **Forms** for each JSON property type, with **form validation** to catch errors before publish
+- **Live preview** showing exactly how content would render in the app
+- **Scheduled publishing** with timers for time-windowed content
+- **Drag-and-drop reordering** for arranging cards, banners, and promotions
+- **A debug view** that exposed the underlying JSON for power users
+- **Git integration** that merged content changes directly into the repo, with separate paths for zone test and production
+
+## Outcome
+
+- Business users updated AEO + Aerie app marketing content **without a release**
+- The same authoring app handled cards, banners, and promotions in one consistent UI
+- The pattern (data-driven content + Git-backed deploys + business-user UI) became a template I'd return to repeatedly in later work
+
+## What this says about how I built — and lead
+
+My manager and I pitched this up to leadership as the model for *all* online content. It didn't get picked up — we were a few years early on the headless trend. But the underlying instinct (separate content from presentation, build the authoring tool the business needs, automate deployment) became foundational to my approach to CMS work years later when AEO finally moved to Contentstack.
+
+The demo is the original authoring app — try adding cards, dragging them around, scheduling them, and toggling the JSON debug view.

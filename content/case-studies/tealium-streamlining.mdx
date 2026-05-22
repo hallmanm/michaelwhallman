@@ -1,0 +1,30 @@
+---
+slug: tealium-streamlining
+---
+
+## Problem
+
+As the lead — and at times sole — engineer on Analytics & Web Optimization, Tealium fell to me. The tool was already in place, but it had drifted: extensions and tags accumulated over years, the UDO (Universal Data Object) lacked syntax consistency, and the tool was primarily used for feature support and quick fixes rather than as a strategic data layer.
+
+Because the UDO directly powered both personalization and AB testing, Tealium's quality was a ceiling on everything downstream.
+
+## Approach
+
+I treated this as a series of disciplined cleanups rather than a single rewrite:
+
+- **Customized and streamlined data collection** within the advanced JS extensions, so the data feeding business reports was reliable by construction
+- **Pruned unrelated extensions and tags** — anything not contributing to data transfer came out, which improved site performance by removing inefficient 3rd-party integrations
+- **Introduced `utag_sync` helpers** purpose-built for AB testing, so experimentation didn't have to fight the tag manager
+- **Standardized the UDO syntax** so property names and shapes were predictable across teams
+- **Designed the library and profile architecture** so Tealium could absorb integrations from newly acquired brands without restructuring
+
+## Outcome
+
+- A cleaner, leaner Tealium configuration aligned to analytics + AB testing goals
+- Reliable, well-shaped data feeding both personalization and experimentation
+- An architecture ready to scale to multi-brand integrations
+- The team unblocked to focus on what the tool was actually for
+
+## What this says about how I work
+
+Tag managers rot quietly. Most of the win here wasn't building anything new — it was deciding what to delete, what to standardize, and what to formalize as a pattern. That's a lot of the work of being responsible for a tool nobody else owns: making it small enough and consistent enough that it stops being a liability.

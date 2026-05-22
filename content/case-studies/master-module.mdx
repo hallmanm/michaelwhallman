@@ -1,0 +1,30 @@
+---
+slug: master-module
+---
+
+## Problem
+
+Under Oracle WCS, marketing messages on AEO's site were locked to a fixed library of content templates. Anything new — a layout the existing templates couldn't express — took **months** to ship: design → WCS development → UI development → QE → deploy. The library had grown past 50 modules, and every variation request that didn't fit one of them became its own multi-month project.
+
+Moving to Contentstack was the chance to fix this. The headless platform handled content authoring well, but template flexibility wasn't going to come from the platform — it had to be designed.
+
+## Approach
+
+I made two bets:
+
+1. **Stop delivering fully formed HTML templates.** Deliver data-driven templates instead — the front-end consumes structured content and decides how to render it.
+2. **Build a dynamic template engine *inside* Contentstack** that lets business users compose templates themselves.
+
+The result was the **Master Module**: a single, configurable Contentstack module that consolidated the 50+ legacy modules into one engine. Business users compose layouts from a responsive 12-column grid (with push/pull adjustments for centering), then place **lockups** — combinations of copy, media, and CTAs — into the grid slots. The same module can produce countless layouts; engineering never has to ship a new "module" again.
+
+## Outcome
+
+- **~3 months saved per template request** — what used to be a coordinated effort across UX, design, engineering, and QE is now an authoring task
+- Business users can produce unique modules on demand or build template libraries for repeated use
+- The 50+ legacy modules collapsed into one engine, simplifying the platform significantly
+
+## What this says about how I work
+
+The legacy library wasn't 50 modules — it was 50 stalled requests. Recognizing that pattern is what unlocked the design. Once you see "every new module is a re-skin of the same five layouts with different content," the right system writes itself: a grid, a lockup primitive, and a config surface.
+
+The demo is the live Master Module — try composing a layout and watch the JSON output update in the console.

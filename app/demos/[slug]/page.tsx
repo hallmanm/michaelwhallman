@@ -1,42 +1,56 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Col, Container, Row } from "react-bootstrap";
-import { RegexDemo } from "@/components/demos/RegexDemo";
-import { ParallaxDemo } from "@/components/demos/ParallaxDemo";
-import { ExperimentVisibilityDemo } from "@/components/demos/ExperimentVisibilityDemo";
-import { PersonalizationDemo } from "@/components/demos/PersonalizationDemo";
+import { ArrowLeft } from "lucide-react";
 
 type DemoEntry = {
   slug: string;
   title: string;
   caseStudySlug: string;
-  Component: React.ComponentType;
+  src: string;
 };
 
 const DEMOS: DemoEntry[] = [
   {
-    slug: "regex",
-    title: "Word-count validator",
-    caseStudySlug: "creative-engineering",
-    Component: RegexDemo,
+    slug: "product-guide-framework",
+    title: "Stop-motion product guide",
+    caseStudySlug: "product-guide-framework",
+    src: "/demo-src/stop-motion/index.html",
   },
   {
-    slug: "parallax",
-    title: "Parallax effect",
-    caseStudySlug: "creative-engineering",
-    Component: ParallaxDemo,
+    slug: "master-module",
+    title: "Master Module — template generator",
+    caseStudySlug: "master-module",
+    src: "/demo-src/template-generator/index.html",
+  },
+  {
+    slug: "headless-cms-app",
+    title: "In-house headless CMS",
+    caseStudySlug: "headless-cms-app",
+    src: "/demo-src/headless-cms/index.html",
   },
   {
     slug: "experiment-visibility",
-    title: "Experiment visibility debugger",
-    caseStudySlug: "ab-testing-program-aeo",
-    Component: ExperimentVisibilityDemo,
+    title: "Adobe Target debugger",
+    caseStudySlug: "experiment-visibility",
+    src: "/demo-src/experiment-visibility/index.html",
   },
   {
-    slug: "personalization",
-    title: "Personalization framework",
-    caseStudySlug: "personalization-framework",
-    Component: PersonalizationDemo,
+    slug: "parallax",
+    title: "Parallax storytelling",
+    caseStudySlug: "parallax",
+    src: "/demo-src/parallax/index.html",
+  },
+  {
+    slug: "panorama",
+    title: "Shoppable 360° panorama",
+    caseStudySlug: "panorama",
+    src: "/demo-src/panorama/index.html",
+  },
+  {
+    slug: "word-count-validator",
+    title: "RegEx word-count validator",
+    caseStudySlug: "word-count-validator",
+    src: "/demo-src/regex/index.html",
   },
 ];
 
@@ -54,26 +68,39 @@ export default async function DemoPage({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const demo = DEMOS.find((d) => d.slug === slug);
   if (!demo) notFound();
-  const Component = demo.Component;
 
   return (
-    <section className="section">
-      <Container>
-        <Row className="mb-4">
-          <Col lg={9}>
-            <Link href={`/work/${demo.caseStudySlug}`} className="small text-secondary">
-              ← Back to case study
-            </Link>
-            <span className="eyebrow d-block mt-3">Live demo</span>
-            <h1 className="display-headline display-5 text-balance">{demo.title}</h1>
-          </Col>
-        </Row>
-        <Row>
-          <Col lg={9}>
-            <Component />
-          </Col>
-        </Row>
-      </Container>
-    </section>
+    <div style={{ position: "fixed", inset: 0, background: "#fbf7f5" }}>
+      <iframe
+        src={demo.src}
+        title={demo.title}
+        style={{ border: "none", width: "100%", height: "100%", display: "block" }}
+      />
+      <Link
+        href={`/work/${demo.caseStudySlug}`}
+        aria-label="Back to case study"
+        style={{
+          position: "fixed",
+          bottom: "1rem",
+          right: "1rem",
+          zIndex: 1000,
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "0.5rem",
+          padding: "0.5rem 0.875rem",
+          background: "rgba(13, 13, 13, 0.92)",
+          color: "#ffffff",
+          textDecoration: "none",
+          borderRadius: "999px",
+          fontSize: "0.8125rem",
+          fontWeight: 500,
+          boxShadow: "0 4px 14px rgba(0, 0, 0, 0.15)",
+          backdropFilter: "blur(8px)",
+        }}
+      >
+        <ArrowLeft size={14} />
+        Back to case study
+      </Link>
+    </div>
   );
 }

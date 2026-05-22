@@ -1,0 +1,27 @@
+---
+slug: experiment-visibility
+---
+
+## Problem
+
+As the experimentation program at AEO grew, so did the number of tests, personalization experiences, and recommendation widgets running concurrently on the site. Business users couldn't tell what was active on a given page; engineers couldn't tell which of their changes were the result of an experiment versus base behavior. Both groups were guessing.
+
+## Approach
+
+I built the **Experiment Visibility** debugger — a JavaScript tool that surfaced every active **Adobe Target** manipulation directly on the page. For any element the experimentation tool had touched (XT activities, AB tests, recommendations), the debugger overlaid context: which experiment, which experience, which variant.
+
+The audiences were intentionally bidirectional:
+- **Business users** got a way to locate and validate features without filing a debug ticket
+- **Engineers** got a way to confirm whether a behavior was their own or a test, before going down a debugging rabbit hole
+
+## Outcome
+
+- Cut validation time for QA and stakeholder reviews of live experiments
+- Reduced engineering time wasted debugging behaviors that turned out to be experiment-driven
+- Made the experimentation program *legible* — a hidden cost of running lots of tests is that nobody can see them; this fixed that
+
+## What this says about how I build tooling
+
+Internal tools earn their keep when they remove a confused conversation. "Is this a test? Which one? What variant am I in?" — that's the conversation Experiment Visibility ended. The tool itself is small, but the time it saved compounded with every test the program ran.
+
+The demo is the original debugger — it categorizes Adobe Target manipulations into XT activities, AB tests, and recommendations.

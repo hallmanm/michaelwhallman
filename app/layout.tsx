@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Instrument_Serif } from "next/font/google";
 import "./globals.scss";
-import { SiteNavbar } from "@/components/layout/SiteNavbar";
-import { SiteFooter } from "@/components/layout/SiteFooter";
 import { siteConfig } from "@/lib/site-config";
 
 const inter = Inter({
@@ -42,11 +40,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${instrumentSerif.variable}`} suppressHydrationWarning>
-      <body>
-        <SiteNavbar />
-        <main>{children}</main>
-        <SiteFooter />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

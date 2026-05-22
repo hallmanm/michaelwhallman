@@ -1,0 +1,26 @@
+---
+slug: content-architecture
+---
+
+## Problem
+
+AEO's legacy CMS, Oracle WCS, had two structural issues that compounded each other: content was tightly coupled to its visual presentation, and reusable elements were scattered (and often duplicated) across the system. Moving to a headless CMS — Contentstack — was the opportunity to fix both, but only if the new architecture was designed deliberately.
+
+## Approach
+
+After extensive discovery with the design and content authoring teams, I anchored the architecture on three principles:
+
+1. **The "lockup" as the atomic unit.** A single marketing message lives in one place — the lockup — and is referenced wherever it needs to appear. The message is authored once and consumed everywhere, ensuring consistency across surfaces.
+2. **Visual control abstracted from the message.** Each surface (web, mobile, app) can style the lockup differently without changing the underlying content. Brand voice stays consistent; visual treatment adapts to context.
+3. **A shared content library.** Reusable entries live in a discoverable library, eliminating the redundancy and bloat that plagued the WCS era.
+
+## Outcome
+
+- Smooth transition from Oracle WCS to Contentstack
+- Significantly less content duplication across channels
+- Cohesive brand message across web, mobile, and app surfaces
+- Faster authoring — and easier audits — because every message has one canonical home
+
+## What this says about how I architect
+
+The right abstraction is the one that lets non-engineers move fast without breaking things. The lockup model wasn't novel — but pairing it with abstracted visual control and a real content library is what made the system *actually* maintainable as content volume grew. Architecture decisions live or die on the day-to-day experience of the people authoring against them.

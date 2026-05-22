@@ -1,0 +1,29 @@
+---
+slug: parallax
+---
+
+## Problem
+
+In the early-to-mid 2010s, scroll-driven parallax was emerging as a way to give marketing pages a sense of depth and narrative without the production cost of video. AEO's editorial team wanted to explore what that storytelling style could look like for the brand, without committing to building it production-grade until they'd seen it move.
+
+## Approach
+
+I built a proof-of-concept parallax framework: a vertical-scroll experience with layered foreground/background elements that move at different rates, paired with breadcrumb navigation that adapts to the user's position in the narrative.
+
+The implementation focuses on a few things that matter for any parallax work:
+
+- **Performant scroll handling** — transforming layers rather than triggering layout
+- **Anchor-driven section transitions** so the framework can drive opacity, position, and timing per section
+- **A scaffolding pattern** that lets editorial decide what each section contains rather than baking in a specific narrative
+
+## Outcome
+
+- A working prototype that proved the storytelling pattern was technically viable for the AEO marketing site
+- Established the building blocks for later immersive features
+- Gave the editorial team a tangible reference point for what was possible
+
+## What this says about how I work
+
+Creative engineering work often lives or dies on the prototype. Proof-of-concept builds aren't throwaway — they're the artifact stakeholders need before they'll greenlight production work. The bet here was that a small, polished demo would unlock conversations that pitch decks couldn't.
+
+The demo is the original parallax framework — scroll through it to see the layered transitions and section navigation.

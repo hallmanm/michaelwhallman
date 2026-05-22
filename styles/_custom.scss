@@ -373,6 +373,14 @@
   }
 }
 
+// Increase container side padding on mobile
+@media (max-width: 575.98px) {
+  .container,
+  .container-fluid {
+    --bs-gutter-x: 3rem;
+  }
+}
+
 // Utility
 .text-balance {
   text-wrap: balance;

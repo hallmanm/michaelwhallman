@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { siteConfig } from "@/lib/site-config";
@@ -14,9 +15,14 @@ const links = [
 
 export function SiteNavbar() {
   const pathname = usePathname();
+  const [expanded, setExpanded] = useState(false);
+
+  useEffect(() => {
+    setExpanded(false);
+  }, [pathname]);
 
   return (
-    <Navbar expand="md" className="site-navbar sticky-top" aria-label="Primary">
+    <Navbar expand="md" expanded={expanded} onToggle={setExpanded} className="site-navbar sticky-top" aria-label="Primary">
       <Container>
         <Navbar.Brand as={Link} href="/" aria-label={siteConfig.name}>
           <Logo />
@@ -36,6 +42,7 @@ export function SiteNavbar() {
                   key={link.href}
                   active={active}
                   className={active ? "active" : undefined}
+                  onClick={() => setExpanded(false)}
                 >
                   {link.label}
                 </Nav.Link>

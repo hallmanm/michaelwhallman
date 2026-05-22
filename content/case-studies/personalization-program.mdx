@@ -1,0 +1,29 @@
+---
+slug: personalization-program
+---
+
+## Problem
+
+Personalization was gaining momentum at AEO, and the request volume for new and varied recommendation widgets was growing fast. The early implementations treated each widget as a one-off feature injected through the experimentation tool — which caused bloat and slowed every subsequent launch.
+
+## Approach
+
+As the individual contributor owning the engineering for personalization, I built a **data-driven framework** that decoupled visual treatment from data delivery:
+
+- **Adobe Target + the Customer Profile** for audience targeting and decisioning
+- **GCP** product feeds as the canonical product data source
+- **Velocity templates** in Adobe Target Designs to render dynamic product output from those feeds
+- A configurable visual layer so the design team could adjust appearance without engineering involvement
+
+The framework's bet: separate "what to show" (decisioning + feed), "which products to show" (Velocity parsing), and "how to show it" (templating config) so any one of those layers could change without touching the others.
+
+## Outcome
+
+- **$12M annual revenue lift** attributed to personalization
+- Earned an **Eagle's Elite** award alongside Jimmy Hunkele for the Personalized Product Recommendations work
+- New widgets could ship to production in **minutes**, not sprint cycles
+- AEO landed in **SailThru's Top 100 Retail Personalization Index**
+
+## What this says about how I build
+
+The lever wasn't sophisticated ML — it was a framework that let the *business* keep moving without engineering becoming the bottleneck. That pattern (data-driven + business-configurable + fast to ship) showed up again and again in my later work on Master Module and the experimentation platform.

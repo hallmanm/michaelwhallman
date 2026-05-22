@@ -1,0 +1,29 @@
+---
+slug: panorama
+---
+
+## Problem
+
+AEO's editorial team wanted to push past flat product photography on category pages — to give customers an experience that felt more like walking into a store than scrolling a catalog. The challenge: do it on the web, on existing browsers, without requiring a plugin install or breaking the shopping flow.
+
+## Approach
+
+I built a **shoppable 360° panorama** using the **Pano2VR** framework. The panorama placed products in a contextual environment, and clickable hotspots layered over the scene turned each product into a direct link back into the shopping experience.
+
+The technical pieces:
+
+- **Pano2VR's player + skin** as the panorama engine, with custom hotspot styling matched to AEO's brand
+- A **fallback experience** for unsupported browsers so the page degraded gracefully
+- **Modernizr-based capability detection** to choose the right rendering path
+
+## Outcome
+
+- One of AEO's earliest immersive editorial experiences on the web
+- A repeatable pattern for combining environmental storytelling with direct commerce
+- Demonstrated that immersive shopping experiences were viable on the web — years before VR/AR commerce became a serious product category
+
+## What this says about how I work
+
+The hardest part of this project wasn't the panorama — it was the *fallback*. Building immersive experiences that gracefully degrade is the difference between a demo and a production feature. The pattern here (capability-detect, choose path, never break the underlying shopping flow) is the same pattern that later guided more complex personalization and experimentation work.
+
+The demo requires a desktop browser to view the panorama itself.

@@ -48,6 +48,14 @@ export const testimonials: Testimonial[] = [
       "I have worked with Michael Hallman for 13 years at American Eagle. He has really grown over the years from starting as a UI developer to building out an entire AB Testing team and process at American Eagle. I highly recommend Michael as a fantastic leader, co-worker, and innovator in his area of expertise.",
   },
   {
+    name: "Kelsey Phillips",
+    title: "Sr. Business Partner",
+    company: "Prequel Solutions",
+    photo: "/linkedin/kelsey.jpg",
+    quote:
+      "I had the opportunity to partner with Michael at American Eagle on recruiting efforts and truly enjoyed working with him. He was responsive, insightful, and thoughtful in his feedback, which helped keep the hiring process moving smoothly. I'd gladly partner with him again.",
+  },
+  {
     name: "Shawn Hazen",
     title: "Manager Mobile Engineering",
     company: "American Eagle Outfitters",

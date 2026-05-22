@@ -1,0 +1,71 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    <link href="https://www.contentstack.com/sdks/contentstack-ui-extensions/dist/latest/ui-extension-sdk.css" rel="stylesheet" type="text/css" media="all" />
+    <!-- <script src="https://www.contentstack.com/sdks/contentstack-ui-extensions/dist/latest/ui-extension-sdk.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="./css/main.css" rel="stylesheet" type="text/css" media="all" />
+    <script src="./js/templates.js"></script>
+  </head>
+  <body id="aeo_module_master" class="aeo-module-master sm">
+    <div class="tabs" style="display: flex">
+      <div style="display: flex; margin: 20px 8px 0 0">
+        <button onclick="updateBreakpoint('sm')" class="sm-break btn cs-border-btn btn-large">Small</button>
+        <button onclick="updateBreakpoint('md')" class="md-break btn cs-border-btn btn-large">Medium</button>
+        <button onclick="updateBreakpoint('lg')" class="lg-break btn cs-border-btn btn-large">Large</button>
+      </div>
+
+      <div class="w-45">
+        <label for="filters" style="display: block">Row Anchor</label
+        ><select id="row-anchors" class="cs-text-box w-100" style="text-transform: capitalize" name="filters" onchange="updateRowAnchor(this.value)"></select>
+      </div>
+    </div>
+    <!-- <div class="w-20" style="display: inline-block; position: absolute; top: 0; left: 50%; z-index: 10; transform: translate(-50%, 0)">
+      <label for="filters" style="display: block">Row Anchor</label
+      ><select id="row-anchors" class="cs-text-box w-100" style="text-transform: capitalize" name="filters" onchange="updateRowAnchor(this.value)"></select>
+    </div> -->
+    <div id="filter_wrap" class="filter_wrap"></div>
+    <div id="options" class="options">
+      <div class="form">
+        <div class="close btn pub-release cs-btn-warning btn-large" onclick="closeOptions()">&#215;</div>
+        <table id="opts"></table>
+      </div>
+    </div>
+    <div id="height">
+      <div id="preview" class="preview">
+        <div id="module_top" class="module-top"></div>
+        <div class="margin-top">
+          <label for="top-margin">Top Margin</label>
+          <input id="sm_top_margin" class="cs-text-box sm-top-margin" type="number" min="0" value="0" name="top-margin" onchange="updateMargin('sm','top',parseInt(this.value))" />
+          <input id="md_top_margin" class="cs-text-box md-top-margin" type="number" min="0" value="0" name="top-margin" onchange="updateMargin('md','top',parseInt(this.value))" />
+          <input id="lg_top_margin" class="cs-text-box lg-top-margin" type="number" min="0" value="0" name="top-margin" onchange="updateMargin('lg','top',parseInt(this.value))" />
+        </div>
+        <div id="grid" class="grid">
+          <div class="row"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </div>
+        <div class="margin-bottom">
+          <label for="bottom-margin">Bottom Margin</label>
+          <input id="sm_bottom_margin" class="cs-text-box sm-bottom-margin" type="number" min="0" value="0" name="bottom-margin" onchange="updateMargin('sm','bottom',parseInt(this.value))" />
+          <input id="md_bottom_margin" class="cs-text-box md-bottom-margin" type="number" min="0" value="0" name="bottom-margin" onchange="updateMargin('md','bottom',parseInt(this.value))" />
+          <input id="lg_bottom_margin" class="cs-text-box lg-bottom-margin" type="number" min="0" value="0" name="bottom-margin" onchange="updateMargin('lg','bottom',parseInt(this.value))" />
+        </div>
+        <div id="module_bottom" class="module-bottom"></div>
+        <div id="overlay" class="overlay">
+          <div class="row" id="row_above">
+            <div class="ctrl-block">
+              <div class="add" onclick="addBlock('above','above')">&#43; &#9635;</div>
+            </div>
+          </div>
+          <div class="row" id="content"></div>
+          <div class="row" id="row_below">
+            <div class="ctrl-block">
+              <div class="add" onclick="addBlock('below','below')">&#43; &#9635;</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="./js/main.js"></script>
+  </body>
+</html>
