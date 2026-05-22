@@ -19,7 +19,8 @@ export function FeaturedWork() {
             <Col key={cs.slug} md={6} lg={4}>
               <Link href={`/work/${cs.slug}`} className="work-card">
                 <div className="work-card__meta">
-                  {cs.company} · {cs.dates}
+                  {cs.company}
+                  <span className="work-card__tag">{cs.category}</span>
                 </div>
                 <div className="work-card__title text-balance">{cs.title}</div>
                 <p className="text-secondary mb-0">{cs.headline}</p>

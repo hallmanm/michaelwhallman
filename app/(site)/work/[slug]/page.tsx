@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { Col, Container, Row } from "react-bootstrap";
@@ -43,8 +44,8 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
     <article>
       <section className="section pb-0">
         <Container>
-          <Row>
-            <Col lg={9}>
+          <Row className="align-items-start g-5">
+            <Col lg={cs.image ? 7 : 9}>
               <span className="eyebrow">
                 {cs.company} · {cs.role} · {cs.dates}
               </span>
@@ -52,6 +53,18 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
               <p className="lead text-balance">{cs.headline}</p>
               <div className="work-card__outcome mt-4">{cs.outcome}</div>
             </Col>
+            {cs.image && (
+              <Col lg={5} className="d-none d-lg-block">
+                <Image
+                  src={cs.image}
+                  alt={cs.title}
+                  width={800}
+                  height={600}
+                  className="w-100 h-auto rounded"
+                  style={{ objectFit: "cover" }}
+                />
+              </Col>
+            )}
           </Row>
         </Container>
       </section>

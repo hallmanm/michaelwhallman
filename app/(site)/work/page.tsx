@@ -1,6 +1,5 @@
-import Link from "next/link";
-import { Col, Container, Row } from "react-bootstrap";
-import { caseStudies } from "@/lib/content/case-studies";
+import { Container, Row, Col } from "react-bootstrap";
+import { WorkGrid } from "@/components/work/WorkGrid";
 
 export const metadata = {
   title: "Work",
@@ -23,20 +22,7 @@ export default function WorkIndexPage() {
             </p>
           </Col>
         </Row>
-        <Row className="gy-4">
-          {caseStudies.map((cs) => (
-            <Col key={cs.slug} md={6} lg={4}>
-              <Link href={`/work/${cs.slug}`} className="work-card">
-                <div className="work-card__meta">
-                  {cs.company} · {cs.dates}
-                </div>
-                <div className="work-card__title text-balance">{cs.title}</div>
-                <p className="text-secondary mb-0">{cs.headline}</p>
-                <div className="work-card__outcome">{cs.outcome}</div>
-              </Link>
-            </Col>
-          ))}
-        </Row>
+        <WorkGrid />
       </Container>
     </section>
   );

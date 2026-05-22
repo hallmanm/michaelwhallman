@@ -11,6 +11,8 @@ export type CaseStudyTopic =
   | "creative"
   | "tooling";
 
+export type CaseStudyCategory = "Impact" | "Business Value" | "Development" | "Leadership";
+
 export type CaseStudy = {
   slug: string;
   title: string;
@@ -19,7 +21,9 @@ export type CaseStudy = {
   dates: string;
   headline: string;
   outcome: string;
+  category: CaseStudyCategory;
   topics: CaseStudyTopic[];
+  image?: string;
   featured?: boolean;
   demo?: CaseStudyDemo;
 };
@@ -34,6 +38,8 @@ export const caseStudies: CaseStudy[] = [
     headline:
       "A unified Elixir/gRPC platform that lets every product team run experiments across custom platforms.",
     outcome: "Unblocked experimentation for previously underserved teams",
+    category: "Leadership",
+    image: "",
     topics: ["experimentation", "leadership"],
     featured: true,
   },
@@ -46,6 +52,8 @@ export const caseStudies: CaseStudy[] = [
     headline:
       "Led the engineering effort behind multiple experiments each driving >4% conversion lift — including a social-proof + GCP-feed program that projected to $130M in additional annual revenue.",
     outcome: "$130M+ annual revenue",
+    category: "Business Value",
+    image: "/case-studies/ab_lg.png",
     topics: ["experimentation", "leadership"],
     featured: true,
   },
@@ -58,6 +66,8 @@ export const caseStudies: CaseStudy[] = [
     headline:
       "As the IC owner of personalization engineering, built a data-driven framework on Adobe Target, the Customer Profile, Velocity templates, and GCP — letting business users ship personalized widgets in minutes.",
     outcome: "$12M annual revenue",
+    category: "Business Value",
+    image: "/case-studies/just_for_you_lg.jpg",
     topics: ["personalization"],
     featured: true,
   },
@@ -70,6 +80,8 @@ export const caseStudies: CaseStudy[] = [
     headline:
       "Took over AEO's outsourced AB testing program from Brooks Bell — proved out the in-house model and terminated the contract for ~$300K in annual savings.",
     outcome: "$300K annual savings",
+    category: "Business Value",
+    image: "/case-studies/brooksbell_lg.png",
     topics: ["experimentation", "leadership"],
   },
   {
@@ -81,6 +93,8 @@ export const caseStudies: CaseStudy[] = [
     headline:
       "Grew the experimentation team from a one-person operation into a 20+ person, fully staffed program — and earned an increased budget at a moment of company-wide cuts.",
     outcome: "1 engineer → 20+ person staffed team",
+    category: "Leadership",
+    image: "/case-studies/awo_lg.jpg",
     topics: ["leadership"],
   },
   {
@@ -92,6 +106,8 @@ export const caseStudies: CaseStudy[] = [
     headline:
       "Designed the content architecture for AEO's migration from Oracle WCS to Contentstack — built around a reusable 'lockup' pattern, abstracted visual control, and a shared content library.",
     outcome: "Consistent brand across channels, fewer redundant entries",
+    category: "Impact",
+    image: "/case-studies/cs_content_model.jpg",
     topics: ["cms", "leadership"],
   },
   {
@@ -103,6 +119,8 @@ export const caseStudies: CaseStudy[] = [
     headline:
       "Took ownership of Tealium and rebuilt it around the UDO — standardized syntax, pruned unused extensions, introduced utag_sync helpers for AB testing, and structured the library/profile architecture for multi-brand scale.",
     outcome: "Cleaner data foundation, faster integrations across brands",
+    category: "Impact",
+    image: "/case-studies/tealium_lg.png",
     topics: ["tooling"],
   },
   {
@@ -114,6 +132,8 @@ export const caseStudies: CaseStudy[] = [
     headline:
       "Built an 8-week, project-based internship program that gave interns real codebase contributions and team exposure — adopted by HR as a model for other departments.",
     outcome: "Adopted by HR as a model program",
+    category: "Leadership",
+    image: "/case-studies/internship.jpg",
     topics: ["leadership"],
   },
   {
@@ -125,6 +145,8 @@ export const caseStudies: CaseStudy[] = [
     headline:
       "A configurable framework that let the design team build product guides — like the AEO Jean Guide and a stop-motion animation built from image sprites — without engineering involvement.",
     outcome: "Design-led iteration, zero engineering overhead per guide",
+    category: "Development",
+    image: "/case-studies/jeanguide_lg.jpg",
     topics: ["creative", "tooling"],
     demo: { type: "embed", href: "/demos/product-guide-framework" },
   },
@@ -137,6 +159,8 @@ export const caseStudies: CaseStudy[] = [
     headline:
       "A dynamic template engine inside Contentstack that consolidated 50+ marketing content modules into one configurable 'Master Module' — moving template creation from months to minutes.",
     outcome: "~3 months saved per template request",
+    category: "Development",
+    image: "/case-studies/master_module_lg.jpg",
     topics: ["cms", "tooling"],
     demo: { type: "embed", href: "/demos/master-module" },
   },
@@ -149,6 +173,8 @@ export const caseStudies: CaseStudy[] = [
     headline:
       "Built a custom JSON authoring app — drag-and-drop reorder, live preview, scheduled publishing, Git-integrated deploys — that let business users update AEO and Aerie app content without a release.",
     outcome: "App content updates without engineering involvement",
+    category: "Development",
+    image: "/case-studies/cms_lg.jpg",
     topics: ["cms", "tooling"],
     demo: { type: "embed", href: "/demos/headless-cms-app" },
   },
@@ -161,6 +187,8 @@ export const caseStudies: CaseStudy[] = [
     headline:
       "A debugging tool that surfaced every active Adobe Target manipulation on a page — so business users could validate live tests and engineers could troubleshoot without guesswork.",
     outcome: "Faster validation and debugging for the experimentation org",
+    category: "Development",
+    image: "",
     topics: ["experimentation", "tooling"],
     demo: { type: "embed", href: "/demos/experiment-visibility" },
   },
@@ -173,6 +201,8 @@ export const caseStudies: CaseStudy[] = [
     headline:
       "A scroll-driven parallax experience exploring layered narrative on the AEO marketing site.",
     outcome: "Reusable proof of concept for future immersive features",
+    category: "Development",
+    image: "/case-studies/parallax.jpg",
     topics: ["creative"],
     demo: { type: "embed", href: "/demos/parallax" },
   },
@@ -185,6 +215,8 @@ export const caseStudies: CaseStudy[] = [
     headline:
       "Used the Pano2VR framework to build an interactive, shoppable panoramic product guide — one of AEO's earliest immersive editorial experiences.",
     outcome: "Pioneering immersive commerce experience",
+    category: "Development",
+    image: "/case-studies/panorama.jpg",
     topics: ["creative"],
     demo: { type: "embed", href: "/demos/panorama" },
   },
@@ -197,6 +229,7 @@ export const caseStudies: CaseStudy[] = [
     headline:
       "A lightweight regex-based word counter that enforced a 300-word limit on contest entries — including the edge cases that the off-the-shelf options missed.",
     outcome: "Reliable input validation for a high-volume contest",
+    category: "Development",
     topics: ["creative", "tooling"],
     demo: { type: "embed", href: "/demos/word-count-validator" },
   },
