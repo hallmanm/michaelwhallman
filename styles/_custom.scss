@@ -154,6 +154,15 @@
       margin-right: 0.15em;
       color: var(--bs-secondary-color);
     }
+
+    &::after {
+      content: "\201D";
+      font-size: 2rem;
+      line-height: 0;
+      vertical-align: -0.3em;
+      margin-left: 0.15em;
+      color: var(--bs-secondary-color);
+    }
   }
 
   &__author {
