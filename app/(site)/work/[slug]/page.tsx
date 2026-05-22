@@ -138,6 +138,7 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
           <Row className="gy-3 mt-2">
             {caseStudies
               .filter((other) => other.slug !== cs.slug)
+              .sort(() => Math.random() - 0.5)
               .slice(0, 3)
               .map((other) => (
                 <Col key={other.slug} md={4}>
