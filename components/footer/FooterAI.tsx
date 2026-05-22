@@ -1,6 +1,6 @@
 "use client";
 
-import { Cpu } from "lucide-react";
+import { Terminal } from "lucide-react";
 import { Accordion, Col, Row } from "react-bootstrap";
 import { SiClaude } from "@icons-pack/react-simple-icons";
 
@@ -11,9 +11,9 @@ const AI_TOOLS = [
     icon: <SiClaude size={14} />,
   },
   {
-    label: "Codex",
-    href: "https://openai.com/codex",
-    icon: <Cpu size={14} />,
+    label: "Codex CLI",
+    href: "https://github.com/openai/codex",
+    icon: <Terminal size={14} />,
   },
 ];
 
@@ -54,7 +54,7 @@ export function FooterAI() {
                 <p className="small text-secondary mb-3">
                   This portfolio is itself a demonstration of AI-assisted engineering. Every layer
                   — from initial planning and architecture decisions to final deployment — was
-                  built in active collaboration with Claude Code and Codex, with all direction,
+                  built in active collaboration with Claude Code and Codex CLI, with all direction,
                   review, and judgment provided by myself.
                 </p>
                 <div className="d-flex gap-3">
