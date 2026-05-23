@@ -648,7 +648,10 @@
     gap: 0.125rem;
   }
 
-  &__field--rating { margin-left: auto; }
+  &__field--rating {
+    margin-left: auto;
+    align-items: center;
+  }
 
   &__label {
     font-size: 0.6875rem;
@@ -664,16 +667,81 @@
     font-weight: 500;
   }
 
-  &__rating {
-    font-size: 1.125rem;
-    color: #ffffff;
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-  }
-
   &__body {
     p { color: #cdd9e5; }
     p:last-child { margin-bottom: 0; }
+  }
+}
+
+// Difficulty gauge — speedometer-style SVG with start-up sweep animation
+.difficulty-gauge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+
+  svg {
+    display: block;
+    width: 88px;
+    height: auto;
+  }
+
+  &__label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--target-color, #768390);
+  }
+
+  &__needle {
+    transform-origin: 100px 100px;
+    transform: rotate(-90deg);
+  }
+
+  &__value {
+    font-family: var(--bs-font-monospace);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #768390;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.3s ease;
+
+    span {
+      font-size: 0.75em;
+      color: #768390;
+      margin-left: 0.0625em;
+    }
+  }
+}
+
+.difficulty-gauge.is-animating .difficulty-gauge__needle {
+  animation: gauge-sweep 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.difficulty-gauge.is-animating .difficulty-gauge__value {
+  animation: gauge-value-reveal 0.3s 1.05s forwards;
+}
+
+@keyframes gauge-sweep {
+  0% { transform: rotate(-90deg); }
+  100% { transform: rotate(var(--target-angle)); }
+}
+
+@keyframes gauge-value-reveal {
+  to { color: #ffffff; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .difficulty-gauge__value { color: #ffffff; }
+
+  .difficulty-gauge.is-animating .difficulty-gauge__needle {
+    animation: none;
+    transform: rotate(var(--target-angle));
+  }
+  .difficulty-gauge.is-animating .difficulty-gauge__value {
+    animation: none;
   }
 }
 
@@ -700,8 +768,8 @@
     .code-source-link {
       display: inline-flex;
       align-items: center;
-      color: inherit;
-      opacity: 0.65;
+      color: #ffffff;
+      opacity: 0.85;
       transition: opacity 0.15s, color 0.15s;
       text-decoration: none;
 

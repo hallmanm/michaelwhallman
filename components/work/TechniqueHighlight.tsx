@@ -1,9 +1,15 @@
 import type { ReactNode } from "react";
+import { DifficultyGauge } from "./DifficultyGauge";
 
 interface TechniqueHighlightProps {
   technique: string;
   difficulty: string;
   children: ReactNode;
+}
+
+function parseDifficulty(s: string): number {
+  const m = s.match(/^(\d+(?:\.\d+)?)/);
+  return m ? parseFloat(m[1]) : 0;
 }
 
 export function TechniqueHighlight({ technique, difficulty, children }: TechniqueHighlightProps) {
@@ -15,8 +21,7 @@ export function TechniqueHighlight({ technique, difficulty, children }: Techniqu
           <span className="technique-card__value">{technique}</span>
         </div>
         <div className="technique-card__field technique-card__field--rating">
-          <span className="technique-card__label">Difficulty</span>
-          <span className="technique-card__rating">{difficulty}</span>
+          <DifficultyGauge difficulty={parseDifficulty(difficulty)} />
         </div>
       </div>
       <div className="technique-card__body">{children}</div>
