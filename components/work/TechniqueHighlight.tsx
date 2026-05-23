@@ -7,7 +7,7 @@ interface TechniqueHighlightProps {
   children: ReactNode;
 }
 
-function parseDifficulty(s: string): number {
+export function parseDifficulty(s: string): number {
   const m = s.match(/^(\d+(?:\.\d+)?)/);
   return m ? parseFloat(m[1]) : 0;
 }

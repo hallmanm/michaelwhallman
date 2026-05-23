@@ -11,13 +11,13 @@ const CY = 100;
 const RADIUS = 80;
 const ANIMATION_DURATION_MS = 1200;
 
-function difficultyToAngle(value: number): number {
+export function difficultyToAngle(value: number): number {
   const clamped = Math.max(0, Math.min(10, value));
   return clamped * 18 - 90;
 }
 
 // Convert an arc-coordinate angle (180° = left, 90° = top, 0° = right) into an (x, y) pair.
-function arcPoint(angleDeg: number, radius = RADIUS) {
+export function arcPoint(angleDeg: number, radius = RADIUS) {
   const rad = (angleDeg * Math.PI) / 180;
   return {
     x: CX + radius * Math.cos(rad),
@@ -27,13 +27,13 @@ function arcPoint(angleDeg: number, radius = RADIUS) {
 
 // Approximates the CSS cubic-bezier(0.4, 0, 0.2, 1) used by the needle, so the
 // number counts up in sync with the needle sweep.
-function easeInOutCubic(t: number): number {
+export function easeInOutCubic(t: number): number {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
 // Interpolated color along the gauge gradient (green → yellow → red).
 // Matches the linearGradient stops defined on the arc.
-function gaugeColor(value: number): string {
+export function gaugeColor(value: number): string {
   const t = Math.max(0, Math.min(10, value)) / 10;
   const lerp = (a: number, b: number, k: number) => Math.round(a + (b - a) * k);
 
