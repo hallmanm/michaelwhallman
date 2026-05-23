@@ -1,5 +1,9 @@
 ---
 slug: panorama
+pullQuote: |
+  The hardest part of this project wasn't the panorama — it was the *fallback*. Building immersive experiences that gracefully degrade is the difference between a demo and a production feature. The pattern here (capability-detect, choose path, never break the underlying shopping flow) is the same pattern that later guided more complex personalization and experimentation work.
+
+  The demo requires a desktop browser to view the panorama itself.
 ---
 
 ## Problem
@@ -16,14 +20,50 @@ The technical pieces:
 - A **fallback experience** for unsupported browsers so the page degraded gracefully
 - **Modernizr-based capability detection** to choose the right rendering path
 
-## Outcome
+## Technical highlights
 
-- One of AEO's earliest immersive editorial experiences on the web
-- A repeatable pattern for combining environmental storytelling with direct commerce
-- Demonstrated that immersive shopping experiences were viable on the web — years before VR/AR commerce became a serious product category
+This codebase is 118 lines of user code orchestrating the Pano2VR library. Honest cap is 6/10 — the techniques are real but the surface area is small.
 
-## What this says about how I work
+<TechniqueHighlight technique="Function decoration / monkey-patching a vendor library method" difficulty="6/10">
 
-The hardest part of this project wasn't the panorama — it was the *fallback*. Building immersive experiences that gracefully degrade is the difference between a demo and a production feature. The pattern here (capability-detect, choose path, never break the underlying shopping flow) is the same pattern that later guided more complex personalization and experimentation work.
+Pano2VR shipped with a fixed behavior: clicking a hotspot called `pano.openUrl()` and navigated the browser to the URL. That was wrong for shoppable bundles — I wanted the click to open a quickview modal *over* the panorama and leave the scene untouched. I didn't want to fork Pano2VR, and the library didn't expose a hook. So I overrode its method at runtime: cache the original, replace it with a router that delegates back to the cached one for everything except bundle URLs.
 
-The demo requires a desktop browser to view the panorama itself.
+```js title="panorama/js/pano.js#L60-L88"
+pano = new pano2vrPlayer("container");
+
+// Capture the library's implementation, then replace it with a router.
+pano._openUrl = pano.openUrl;
+pano.openUrl = function (a, c) {
+  if (/bundle/.test(a)) {
+    panoQV(a, c, pano);          // intercept: open quickview modal
+  } else {
+    pano._openUrl(a, c);         // delegate: let the library do its thing
+  }
+};
+```
+
+This is the same pattern Python decorators implement, what Sinon's `spy.wrap()` does for testing, and what every middleware library does under the hood — preserve the original behavior as a fallthrough, wrap with new behavior in front. The risk is that the next library release breaks your override silently; the reward is one line of patch instead of forking a 50KB minified vendor file. The quickview itself plugged into the pattern cleanly: open/close callbacks pause and resume the panorama's auto-rotation, so the scene doesn't spin behind the modal.
+
+</TechniqueHighlight>
+
+<TechniqueHighlight technique="Capability-driven progressive fallback" difficulty="5/10">
+
+Browsers in 2014 sat on three rendering capabilities: modern (CSS3 3D transforms or WebGL), touch (mobile, simplified controls), and legacy (Flash, soon-to-be-dead). A panorama that only worked in one of those would break for too much of the audience. The bootstrap ladder evaluates capabilities top-down and selects the right rendering path *before* loading the player, so the panorama either works correctly or degrades to a documented fallback — never broken.
+
+```js title="panorama/js/pano.js#L60-L117"
+if (ggHasHtml5Css3D() || ggHasWebGL()) {
+  // Modern path — HTML5 panorama.
+  pano = new pano2vrPlayer("container");
+  // ...attach monkey-patch, attach skin...
+
+  // Touch devices get a simplified XML config with fewer hotspots.
+  pano.readConfigUrl(Modernizr.touch ? "xml/touch_pano.xml" : "xml/pano.xml");
+}
+// else if (swfobject.hasFlashPlayerVersion("9.0.0")) {
+//   // Flash fallback — preserved as commented code for the archaeology.
+// }
+```
+
+The principle that earned this its rating isn't the capability check itself — it's that the ladder runs *before* anything else loads. Wrong-order capability checks (load first, then check, then degrade) flash broken UI to users. This one decides what to load, then loads it, so the user sees one of three correct experiences, never a half-broken one.
+
+</TechniqueHighlight>

@@ -1,5 +1,7 @@
 ---
 slug: personalization-program
+pullQuote: |
+  The lever wasn't sophisticated ML — it was a framework that let the *business* keep moving without engineering becoming the bottleneck. That pattern (data-driven + business-configurable + fast to ship) showed up again and again in my later work on Master Module and the experimentation platform.
 ---
 
 ## Problem
@@ -17,13 +19,83 @@ As the individual contributor owning the engineering for personalization, I buil
 
 The framework's bet: separate "what to show" (decisioning + feed), "which products to show" (Velocity parsing), and "how to show it" (templating config) so any one of those layers could change without touching the others.
 
-## Outcome
+## Technical highlights
 
-- **$12M annual revenue lift** attributed to personalization
-- Earned an **Eagle's Elite** award alongside Jimmy Hunkele for the Personalized Product Recommendations work
-- New widgets could ship to production in **minutes**, not sprint cycles
-- AEO landed in **SailThru's Top 100 Retail Personalization Index**
+<TechniqueHighlight technique="Runtime CSS injection / self-contained micro-frontend bundling" difficulty="7/10">
 
-## What this says about how I build
+The personalization framework deploys inside Adobe Target activities, which means it ships as one self-contained JS file into a host page it doesn't own. There's no build step, no CSS file, no DOM ownership — the framework has to *bring everything with it*. So the framework embeds ~700 lines of CSS as a concatenated string, calls a shared idempotent injector (defined once in the AWO namespace, reused by every activity), polls until jQuery and the page footer are ready, and then attaches its widgets. Add a class prefix (`awo-rec-`) to scope styles, an ID check to make re-injection a no-op, and a `class="awo-trans-remove"` marker for clean teardown — and you have what the industry would later call a micro-frontend, years before the term existed.
 
-The lever wasn't sophisticated ML — it was a framework that let the *business* keep moving without engineering becoming the bottleneck. That pattern (data-driven + business-configurable + fast to ship) showed up again and again in my later work on Master Module and the experimentation platform.
+The injector is part of the shared AWO sync layer — handles modern and legacy IE paths, no-ops if the same ID is already installed:
+
+```js title="experiment-visibility/js/utag_sync.js#L241-L276"
+setStyles: function (styles, id, remove) {
+  if (id && document.getElementById(id)) return;   // already installed, bail
+
+  var newStylesheet = document.createElement('style');
+  if (id) newStylesheet.id = id;
+  if (remove) newStylesheet.className = 'awo-trans-remove';
+
+  if (newStylesheet.styleSheet) {
+    newStylesheet.styleSheet.cssText = styles;     // legacy IE
+  } else {
+    newStylesheet.appendChild(document.createTextNode(styles));   // modern
+  }
+
+  document.head.appendChild(newStylesheet);
+}
+```
+
+The framework calls into that injector with its own activity-scoped ID, then trampolines through a pair of `runPoll2` calls — wait for jQuery, then wait for the host page's footer — before attaching anything:
+
+```js title="personalization/js/framework.js#L1349-L1356"
+if (document.getElementById('AWO-Frmwk') == null) {
+  awo.setStyles(activity_style, 'AWO-Frmwk');
+}
+
+awo.runPoll2('Adobe Recs Framework', 'jQuery', function () {
+  awo.runPoll2('Recs Framework Footer', '.footer-default', init);
+});
+```
+
+What earns this its rating isn't any single piece — it's the *shape* of the deployment: a deliverable that cooperates with whatever host page it lands in, can be uninstalled by removing one tag, and never assumes anything is already loaded. That's a deployment architecture, not just a UI pattern.
+
+</TechniqueHighlight>
+
+<TechniqueHighlight technique="Hand-rolled carousel with edge detection, section-snap, and scroll arbitration" difficulty="6/10">
+
+The framework needs a horizontal carousel inside every widget, and pulling in a carousel library would have bloated the deployable. So `handleCarousel` is a full carousel implementation: throttled resize and scroll handlers, `scrollableContent()` detects whether the content overflows, conditional arrow display at boundaries with a buffer, and click-to-next-section uses geometry to find the first off-screen sibling and scroll to its edge. The same cooperative scroll arbitration pattern from the parallax work appears here, but applied to a horizontal axis.
+
+```js title="personalization/js/framework.js#L1220-L1311"
+function moveWidget(dir) {
+  if (dir === 'right') {
+    for (var i = 0; i < sections.length; i++) {
+      var section = $(sections)[i];
+      var left  = $(section).position().left;
+      var right = left + $(section).width();
+
+      // First section whose right edge is past the viewport → scroll to its left edge
+      if (right + 5 >= data.sectionsWidth) {
+        var margin = parseInt($(section).css('margin-right')) || 0;
+        scrollElem(data.scrollPos + left + margin);
+        break;
+      }
+    }
+  }
+  // ...mirror branch for 'left'...
+}
+
+function throttleScroll(e) {
+  clearTimeout(scroll_thr);
+  scroll_thr = setTimeout(function () {
+    // User input always preempts in-flight programmatic animation.
+    if (e.type === 'mousedown' || e.type === 'mousewheel' || e.type === 'DOMMouseScroll') {
+      stopAnimation();
+    }
+    if (data.winWidth > 767) checkScrollPos();
+  }, 10);
+}
+```
+
+The geometry is the interesting part: `position().left` + width gives you each section's right edge; the first one past the viewport boundary is the scroll target; the margin adjustment lines it up flush. No carousel library could express this cleanly without a wrapper anyway — the page-specific geometry leaks through every abstraction. Sometimes the right answer is just to write the 80 lines.
+
+</TechniqueHighlight>

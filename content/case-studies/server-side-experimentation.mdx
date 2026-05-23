@@ -1,5 +1,7 @@
 ---
 slug: server-side-experimentation
+pullQuote: |
+  Repositioning a team is a leadership job, not an engineering one. The technical work mattered, but the bigger lever was deciding what the team *wouldn't* do anymore.
 ---
 
 ## Problem
@@ -28,12 +30,6 @@ During the Shopify migration I led the effort to **leverage AI** to build integr
 let business users self-serve experiments directly from the Shopify UI — translating a
 designer's intent into a valid experiment definition without requiring engineering tickets.
 
-## Outcome
-
-- A reusable platform unblocking experimentation for teams that previously had none
-- Client-side throughput up significantly; decision-making accelerated across the org
-- Business users running their own experiments on Shopify without engineering involvement
-
 ## Technical highlights
 
 - **Elixir + gRPC** for the platform: low-latency variant assignment, supervisable, easy to
@@ -42,8 +38,3 @@ designer's intent into a valid experiment definition without requiring engineeri
   agree on the variant
 - **AI-assisted authoring** layered onto Shopify so business users describe an experiment in
   natural language and get a structured definition back
-
-## What I led, not just shipped
-
-Repositioning a team is a leadership job, not an engineering one. The technical work mattered,
-but the bigger lever was deciding what the team *wouldn't* do anymore.

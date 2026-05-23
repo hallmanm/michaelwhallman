@@ -1,5 +1,9 @@
 ---
 slug: headless-cms-app
+pullQuote: |
+  My manager and I pitched this up to leadership as the model for *all* online content. It didn't get picked up — we were a few years early on the headless trend. But the underlying instinct (separate content from presentation, build the authoring tool the business needs, automate deployment) became foundational to my approach to CMS work years later when AEO finally moved to Contentstack.
+
+  The demo is the original authoring app — try adding cards, dragging them around, scheduling them, and toggling the JSON debug view.
 ---
 
 ## Problem
@@ -23,14 +27,116 @@ The architecture had two pieces:
 - **A debug view** that exposed the underlying JSON for power users
 - **Git integration** that merged content changes directly into the repo, with separate paths for zone test and production
 
-## Outcome
+## Technical highlights
 
-- Business users updated AEO + Aerie app marketing content **without a release**
-- The same authoring app handled cards, banners, and promotions in one consistent UI
-- The pattern (data-driven content + Git-backed deploys + business-user UI) became a template I'd return to repeatedly in later work
+<TechniqueHighlight technique="Sweep-line interval segmentation" difficulty="8/10">
 
-## What this says about how I built — and lead
+The card preview is a 2D matrix: rows are *time ranges*, columns are *locations*. Cards can span multiple rows (if their time window crosses range boundaries) and multiple columns (if they target multiple locations). The grid is reconstructed from a flat array of cards by computing the set of distinct time ranges — and that requires a real algorithm, not an ad-hoc loop. The **sweep-line** technique collects every unique timestamp from every card's start and end, sorts them, then declares adjacent pairs as ranges. Each range has the property that the active-card set is *constant* within it; the boundaries are precisely where cards enter or exit. Classic computational geometry, applied to marketing scheduling.
 
-My manager and I pitched this up to leadership as the model for *all* online content. It didn't get picked up — we were a few years early on the headless trend. But the underlying instinct (separate content from presentation, build the authoring tool the business needs, automate deployment) became foundational to my approach to CMS work years later when AEO finally moved to Contentstack.
+```js title="headless-cms/js/logic.js#L1694-L1744"
+function getRanges(objs) {
+  var timers = [], timestamps = [], ranges = [];
+  // ...collect every card's timer object into `timers`...
 
-The demo is the original authoring app — try adding cards, dragging them around, scheduling them, and toggling the JSON debug view.
+  for (var x = 0; x < timers.length; x++) {
+    for (var y = 0; y < timers[x].length; y++) {
+      var timer = timers[x][y];
+      var start_stamp = getTimestamp(timer.start_date, timer.start_time);
+      var end_stamp   = getTimestamp(timer.end_date,   timer.end_time);
+
+      // Each boundary is recorded once — duplicate-suppressing via indexOf
+      if (timestamps.indexOf(start_stamp) === -1) timestamps.push(start_stamp);
+      if (timestamps.indexOf(end_stamp)   === -1) timestamps.push(end_stamp);
+    }
+  }
+  timestamps.sort(sortNumber);
+
+  // Each adjacent pair defines a range with a constant active-card set.
+  for (var g = 0; g < timestamps.length - 1; g++) {
+    ranges[g] = { start: timestamps[g], end: timestamps[g + 1] };
+  }
+  return ranges;
+}
+```
+
+The downstream code (`addElems`) then does interval-overlap testing — for each card, find every range it intersects with — and places the card in each `(range × location)` cell. The result is a Gantt-chart-style visualization where overlap and conflict are visible at a glance. The "is this card live at time T?" question becomes a constant-time lookup against the grid rather than a sequential scan over every card's timer.
+
+</TechniqueHighlight>
+
+<TechniqueHighlight technique="Time-window JSON snapshot via interval overlap test" difficulty="7/10">
+
+The preview answers a different question than the publish artifact does: the preview shows *every* scheduled card across all ranges; the publish artifact needs only the cards live *right now*. `createOutput(temp)` takes a user-specified timestamp (or the current time if omitted) and emits a JSON file containing exactly the set of cards active at that moment. The filter is a single interval-overlap predicate — and the sentinel-clamped timestamps let it run without branching on "is this card scheduled at all."
+
+```js title="headless-cms/js/logic.js#L1421-L1499"
+// Given any timestamp, emit JSON for the cards live at that exact moment.
+for (var x = 0; x < elems.length; x++) {
+  if ($(elems[x]).attr('data-start') <= temp_time &&
+      $(elems[x]).attr('data-end')   >  temp_time) {
+    temp_elems.push(elems[x]);
+  }
+}
+elems = temp_elems;
+createJSON(elems, type, temp);   // build JSON from just the live subset
+```
+
+This is the feature that makes scheduled publishing actually trustworthy: authors can preview "what does production look like at 9am Tuesday?" before pushing. Most CMSes don't ship this until years later under names like "scheduled publish preview"; this one had it in 2013, because the data model was designed to make it a single-loop filter rather than a separate codepath.
+
+</TechniqueHighlight>
+
+<TechniqueHighlight technique="Three-flag dirty-state tracking with onbeforeunload guard" difficulty="6/10">
+
+The app has three independent publish targets — saved (local), zone (staging), prod (production). Each can be in or out of sync with the in-memory state independently. Most apps either over-alert (warn on every leave) or under-alert (no warning at all and you lose work). This one alerts only when *all three* targets are dirty — the principle being that as long as your work exists in *somewhere* persistent, you're safe. The three flags reset on each successful write to their respective target; `unsaved()` invalidates all three when an edit fires.
+
+```js title="headless-cms/js/logic.js#L91-L105"
+var zone_written  = true;
+var prod_written  = true;
+var saved_written = true;
+var auto_save = window.setInterval(save, 300000);   // safety net every 5 min
+
+function unsaved() {
+  zone_written  = false;
+  prod_written  = false;
+  saved_written = false;
+}
+
+window.onbeforeunload = function (event) {
+  if (!prod_written && !saved_written && !zone_written) {
+    var message = "Changes you made may not be saved.";
+    if (typeof event == "undefined") event = window.event;
+    if (event) event.returnValue = message;
+    return message;
+  }
+};
+```
+
+The principle generalizes: dirty-tracking is a function of multiple persistence layers, not a single boolean. Editors that get this right (Google Docs, Figma) all encode it the same way — at least one safe copy means no warning.
+
+</TechniqueHighlight>
+
+<TechniqueHighlight technique="Git-backed deployment contract with stderr-aware response handling" difficulty="5/10">
+
+The "CMS" half of headless CMS is just authoring — the deployment half is what makes it real. The original architecture: client posts `{ action, time, jira_ticket, json }` to a server endpoint; the server runs `git add && git commit && git push` against a repo that the mobile apps consume; the client parses git's stderr output to detect the "nothing to commit" case and reshapes the user-facing message accordingly. The whole authoring → deploy loop fits in one round trip. This is "CMS as a git frontend" before that pattern had a name — the same shape Netlify CMS and Decap CMS would adopt a decade later.
+
+```js title="headless-cms/js/logic.js#L257-L277"
+$.ajax({
+  url: "/api/demos/headless-cms",
+  type: 'POST',
+  data: { action: action, time: time, jira_ticket: jira_ticket, json: json },
+  success: function (data) {
+    if (action != 'auto_save') {
+      // The server returns git's actual stdout — including the "nothing to commit"
+      // case, which is a success on the server side but a no-op the user should see.
+      if (data.search("no changes added to commit") > -1 ||
+          data.search("nothing to commit") > -1) {
+        alert_msg = "No Change in File. Nothing was Pushed to the Repo.";
+      }
+      alert(alert_msg);
+    }
+    $(shadow).removeClass('loading');
+  }
+});
+```
+
+Three things make this work. **Action-routing** (`action: 'save' | 'auto_save' | 'zone' | 'prod'`) selects the server-side commit target without changing the endpoint. **Jira ticket binding** ties content commits to the project tracker so audit trails work out of the box. And **stderr parsing on the client** turns a server "success with no-op" into a meaningful user message rather than a misleading "saved!" toast. The drag-and-drop reorder (jQuery UI's sortable widget) feeds into this same loop: every sort stop updates the in-memory model, every save commits the new card order to git.
+
+</TechniqueHighlight>

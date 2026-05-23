@@ -4,14 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "pnpm run lint && pnpm run typecheck && pnpm run test && next build",
-    "build:next": "next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "test": "NODE_ENV=test vitest run",
     "test:watch": "NODE_ENV=test vitest",
-    "test:coverage": "NODE_ENV=test vitest run --coverage"
+    "test:coverage": "NODE_ENV=test vitest run --coverage",
+    "verify": "pnpm run lint && pnpm run typecheck && pnpm run test"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -41,7 +41,9 @@
     "eslint": "^9.18.0",
     "eslint-config-next": "^15.1.4",
     "jsdom": "^29.1.1",
+    "rehype-pretty-code": "^0.14.3",
     "sass": "^1.83.4",
+    "shiki": "^4.1.0",
     "typescript": "^5.7.3",
     "vitest": "^4.1.7"
   }

@@ -1,5 +1,9 @@
 ---
 slug: master-module
+pullQuote: |
+  The legacy library wasn't 50 modules — it was 50 stalled requests. Recognizing that pattern is what unlocked the design. Once you see "every new module is a re-skin of the same five layouts with different content," the right system writes itself: a grid, a lockup primitive, and a config surface.
+
+  The demo is the live Master Module — try composing a layout and watch the JSON output update in the console.
 ---
 
 ## Problem
@@ -17,14 +21,85 @@ I made two bets:
 
 The result was the **Master Module**: a single, configurable Contentstack module that consolidated the 50+ legacy modules into one engine. Business users compose layouts from a responsive 12-column grid (with push/pull adjustments for centering), then place **lockups** — combinations of copy, media, and CTAs — into the grid slots. The same module can produce countless layouts; engineering never has to ship a new "module" again.
 
-## Outcome
+## Technical highlights
 
-- **~3 months saved per template request** — what used to be a coordinated effort across UX, design, engineering, and QE is now an authoring task
-- Business users can produce unique modules on demand or build template libraries for repeated use
-- The 50+ legacy modules collapsed into one engine, simplifying the platform significantly
+<TechniqueHighlight technique="Unidirectional dataflow architecture (Flux-before-Redux)" difficulty="7/10">
 
-## What this says about how I work
+The hard part of any visual configurator isn't the UI — it's keeping the data model coherent as the user edits. Most teams reach for a state management library; this one ships its own. Three explicit state layers — a transient input buffer (`data.options`), persistent block state (`data[area].rows.blocks.options`), and an emitted output schema (`data.output.layout`) — with a one-way commit path between them. Validation runs against the transient layer, so an invalid edit never reaches persistent state. The output schema is rebuilt from scratch on every commit, with empty values omitted, so the schema is always the minimal representation of the layout. Same shape as Redux; built in plain jQuery in 2021.
 
-The legacy library wasn't 50 modules — it was 50 stalled requests. Recognizing that pattern is what unlocked the design. Once you see "every new module is a re-skin of the same five layouts with different content," the right system writes itself: a grid, a lockup primitive, and a config surface.
+```text
+(DOM event) → updateOptions() → data.options                [transient buffer]
+                                       ↓
+                                  validate()                [3-rule composite validator]
+                                       ↓
+                                  applyOptions()            [commit transient → persistent]
+                                       ↓
+                                  data[area].rows.blocks    [persistent block state]
+                                       ↓
+                                  updateBlock()             [regex-driven className mutation]
+                                       ↓
+                                  updateData()              [serialize → output schema]
+                                       ↓
+                                  data.output.layout        [emitted, empties omitted]
+                                       ↓
+                                  storeData()               [debounced persist]
+```
 
-The demo is the live Master Module — try composing a layout and watch the JSON output update in the console.
+```js title="template-generator/js/main.js#L594-L621"
+// The "commit" step — copies the transient buffer to persistent state
+// only if validate() passes, then triggers DOM + schema updates downstream.
+function applyOptions() {
+  if (!validate()) {
+    updateTemplates();
+
+    var blockOptions = data[data.options.area]['row_' + data.options.row]
+                          .blocks['block_' + data.options.block].options;
+
+    for (var i = 0; i < data.loops.breakpoints.length; i++) {
+      for (var x = 0; x < data.loops.options.length; x++) {
+        var val = data.options[breakpoint][option];
+        if (!val && (option === 'padding' || option === 'margin') && breakpoint === 'sm') {
+          val = '0';
+        }
+        blockOptions[breakpoint][option] = val;
+      }
+    }
+
+    updateBlock(data.options.area, data.options.row, data.options.block);
+    closeOptions();
+    updateData();   // rebuilds data.output.layout from scratch, omitting empty values
+  }
+}
+```
+
+The `processing` flag (not shown) suppresses `storeData()` during bulk rebuilds — the same guard React's batched updates implement. The whole thing is ~100 lines of architectural plumbing that holds together a configurator with multi-row × multi-block × multi-breakpoint × multi-option state.
+
+</TechniqueHighlight>
+
+<TechniqueHighlight technique="CSS-cascade-driven responsive system via compound selectors" difficulty="7/10">
+
+Most responsive frameworks use media queries to switch styling at breakpoints. This one inverts the pattern: the body carries a single class (`.sm`, `.md`, or `.lg`), and compound selectors decide which rules match at each breakpoint. The CSS *itself* implements the cascade — `md` styles automatically inherit to `lg` via duplicate selectors; `lg`-specific rules only fire inside `.preview`. The JS just sets the body class. The selector engine does everything else.
+
+```css title="template-generator/css/main.css#L13-L84"
+/* Width at each breakpoint — note md selectors also apply at lg by design. */
+.span-sm-12,
+.md .span-md-12,
+.lg .span-md-12,            /* ← md inherits to lg automatically */
+.lg .preview .span-lg-12    /* ← lg override scoped to preview */
+{ width: 100%; }
+
+/* Animation dispatch — TWO classes on the same element select keyframe + target. */
+.animation-sm-top.animate-sm-text .text,
+.animation-sm-top.animate-sm-background .background,
+.animation-sm-top.animate-sm-both .text,
+.animation-sm-top.animate-sm-both .background,
+.md .animation-md-top.animate-md-text .text,
+.md .animation-md-top.animate-md-background .background,
+.lg .animation-md-top.animate-md-text .text,
+.lg .preview .animation-lg-top.animate-lg-text .text
+{ animation-name: top; }
+```
+
+Two patterns compose here. First, **selector-based responsive cascade**: the breakpoint hierarchy is encoded in the selectors, not the rules — so adding a new breakpoint means duplicating selectors, not rewriting any logic. Second, **compound-class compositional dispatch**: `.animation-md-top.animate-md-text` (two classes on the same element) selects *which keyframe* runs on *which child*. The author writes the JS-side data model with a `direction` and a `target`; the CSS combines them at runtime to pick the right animation. No JS branching, no class-name string manipulation in the runtime — just selector composition.
+
+</TechniqueHighlight>

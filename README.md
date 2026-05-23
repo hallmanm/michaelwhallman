@@ -37,14 +37,20 @@ Then open <http://localhost:3000>.
 | Command | What it does |
 | --- | --- |
 | `pnpm dev` | Run the dev server |
-| `pnpm build` | Lint, typecheck, test, then production build (fails fast) |
-| `pnpm build:next` | Production build only — skips the gates above |
+| `pnpm build` | Production build (writes to `.next/`) |
+| `pnpm verify` | Lint + typecheck + test, no `next build` — safe to run while `pnpm dev` is up |
 | `pnpm start` | Run the production build |
 | `pnpm lint` | ESLint |
 | `pnpm typecheck` | TypeScript |
 | `pnpm test` | Run the Vitest test suite |
 | `pnpm test:watch` | Vitest in watch mode |
 | `pnpm test:coverage` | Vitest with v8 coverage report |
+
+> **Note**: `pnpm build` and `pnpm dev` share `.next/`. Running `build` while
+> `dev` is up will overwrite the dev chunks and 500 the next dev request. Use
+> `pnpm verify` for safety checks during development. Vercel runs
+> `pnpm verify && pnpm build` (see `vercel.json`) so deploy-time gates are
+> preserved.
 
 ## Repo structure
 

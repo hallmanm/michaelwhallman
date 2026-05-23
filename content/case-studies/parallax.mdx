@@ -1,5 +1,9 @@
 ---
 slug: parallax
+pullQuote: |
+  Creative engineering work often lives or dies on the prototype. Proof-of-concept builds aren't throwaway — they're the artifact stakeholders need before they'll greenlight production work. The bet here was that a small, polished demo would unlock conversations that pitch decks couldn't.
+
+  The demo is the original parallax framework — scroll through it to see the layered transitions and section navigation.
 ---
 
 ## Problem
@@ -16,14 +20,58 @@ The implementation focuses on a few things that matter for any parallax work:
 - **Anchor-driven section transitions** so the framework can drive opacity, position, and timing per section
 - **A scaffolding pattern** that lets editorial decide what each section contains rather than baking in a specific narrative
 
-## Outcome
+## Technical highlights
 
-- A working prototype that proved the storytelling pattern was technically viable for the AEO marketing site
-- Established the building blocks for later immersive features
-- Gave the editorial team a tangible reference point for what was possible
+This codebase is 85 lines of user code — the proof-of-concept layer of a parallax framework. Honest cap is 5/10; nothing here pushes into the 7+ tier.
 
-## What this says about how I work
+<TechniqueHighlight technique="Cooperative scroll arbitration (user input preempts programmatic animation)" difficulty="5/10">
 
-Creative engineering work often lives or dies on the prototype. Proof-of-concept builds aren't throwaway — they're the artifact stakeholders need before they'll greenlight production work. The bet here was that a small, polished demo would unlock conversations that pitch decks couldn't.
+Any scroll-driven interface has the same race condition: the user clicks a navigation control that triggers a programmatic scroll animation, then during that animation they touch the wheel or trackpad — and now two scroll sources are fighting. The "fix" most implementations ship is wrong (cancel the user's input). The right answer is to give the user priority, always. This requires the programmatic animation to listen for its own preemption signals.
 
-The demo is the original parallax framework — scroll through it to see the layered transitions and section navigation.
+```js title="parallax/js/parallax.js#L70-L85"
+// User-driven scroll: cancel any in-flight programmatic animation immediately.
+body.on("scroll DOMMouseScroll mousewheel", function (evt) {
+  if (evt.type === "mousewheel" || evt.type === "DOMMouseScroll") {
+    body.stop(true);
+  }
+});
+
+// Breadcrumb click: kick off a distance-scaled animation, but stop any prior one first.
+paraCrumb.on("click", function () {
+  body.stop();
+
+  var scrollToAnchor = $(this).attr("href");
+  var scrollToPos = $(scrollToAnchor).offset().top;
+
+  body.animate(
+    { scrollTop: scrollToPos + "px" },
+    (Math.abs(scrollToPos - Math.abs(scrollPos)) / 800) * 1000
+  );
+});
+```
+
+Two cooperative pieces: (1) the wheel/touch listener calls `body.stop(true)` to abort any programmatic animation the moment user input arrives, and (2) the breadcrumb handler also calls `body.stop()` before starting its own, so back-to-back clicks don't queue up an animation backlog. The duration is computed from `distance / 800 * 1000` — far clicks take longer than near clicks, which keeps perceived velocity consistent regardless of where you're jumping.
+
+</TechniqueHighlight>
+
+<TechniqueHighlight technique="Programmatic generation of declarative scroll-tracking attributes" difficulty="4/10">
+
+Skrollr drives scroll-based effects through data attributes (`data-anchor-target`, `data-center`, `data-bottom-top`, etc.) — but writing them by hand for every section is repetitive. This walks every section in the page and emits a breadcrumb element with the right attributes for *that* anchor. The breadcrumb's visual state then becomes a pure function of scroll position: when the page hits that section's center, the breadcrumb turns red; otherwise it's white.
+
+```js title="parallax/js/parallax.js#L19-L23"
+_.each(anchors, function (anchor) {
+  var anchorId = $(anchor).attr("id");
+
+  $(paraCrumbs).append(
+    '<div class="paraCrumb" data-anchor-target="#' + anchorId + '"' +
+    ' data-bottom-top="background-color: rgba(255,255,255,.6);"' +
+    ' data-center="background-color: rgba(204,36,41,.6);"' +
+    ' data-top-bottom="background-color: rgba(255,255,255,.6);">' +
+    "</div>"
+  );
+});
+```
+
+The leverage is that the declarative attributes do the rest — Skrollr interpolates between states automatically as the user scrolls. The generator only has to know the anchor IDs and the state map; it doesn't have to know anything about the scroll position or how the interpolation works.
+
+</TechniqueHighlight>
