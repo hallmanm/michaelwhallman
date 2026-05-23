@@ -1,5 +1,9 @@
 ---
 slug: experiment-visibility
+pullQuote: |
+  Internal tools earn their keep when they remove a confused conversation. "Is this a test? Which one? What variant am I in?" — that's the conversation Experiment Visibility ended. The tool itself is small, but the time it saved compounded with every test the program ran.
+
+  The demo is the original debugger — it categorizes Adobe Target manipulations into XT activities, AB tests, and recommendations.
 ---
 
 ## Problem
@@ -14,14 +18,95 @@ The audiences were intentionally bidirectional:
 - **Business users** got a way to locate and validate features without filing a debug ticket
 - **Engineers** got a way to confirm whether a behavior was their own or a test, before going down a debugging rabbit hole
 
-## Outcome
+## Technical highlights
 
-- Cut validation time for QA and stakeholder reviews of live experiments
-- Reduced engineering time wasted debugging behaviors that turned out to be experiment-driven
-- Made the experimentation program *legible* — a hidden cost of running lots of tests is that nobody can see them; this fixed that
+<TechniqueHighlight technique="Inverted-index activity tracker with bimodal recursive driver" difficulty="7/10">
 
-## What this says about how I build tooling
+A single page can have multiple Adobe Target activities active simultaneously, and multiple activities can affect the same DOM element. The debugger has to highlight an element iff *at least one* active activity touches it — which means the lookup is "given this selector, which active activities reference it?" The natural data structure is a reverse index. `activeObj` maps each selector to a *list* of activity indices (using array push/pop as a multiset operation, so toggling activities in arbitrary order stays correct). The driver `recordAction` is bimodal: called globally without `objs` it does a clear-all-then-recurse over every activity; called with `objs` it does push/pop on a single selector.
 
-Internal tools earn their keep when they remove a confused conversation. "Is this a test? Which one? What variant am I in?" — that's the conversation Experiment Visibility ended. The tool itself is small, but the time it saved compounded with every test the program ran.
+```js title="experiment-visibility/js/debugger.js#L568-L624"
+function recordAction(active, objs, activity) {
+  if (objs === undefined) {
+    // Global mode — clear all trackers, then recurse per activity.
+    for (var key in activeObj) activeObj[key] = [];
 
-The demo is the original debugger — it categorizes Adobe Target manipulations into XT activities, AB tests, and recommendations.
+    if (active) {
+      for (var j = 0; j < activities.length; j++) {
+        recordAction(true, getElementList(j), j);    // recurse into per-selector branch
+      }
+    }
+  } else {
+    // Per-selector mode — push/pop the activity index as a multiset operation.
+    activity = parseInt(activity);
+    for (var i = 0; i < objs.length; i++) {
+      if (active) activeObj[objs[i]].push(activity);
+      else        activeObj[objs[i]].pop(activity);
+    }
+  }
+}
+
+function toggleHighlight() {
+  for (var obj in activeObj) {
+    if (activeObj[obj].length > 0) {
+      highlight(obj, true);     // any active activity references this selector
+    } else {
+      highlight(obj, false);
+    }
+  }
+}
+```
+
+Three things combine: the reverse-index data structure (constant-time lookup for "should this element be highlighted?"), bimodal recursion (one function handles both global and per-selector operations by changing argument shape), and the multiset semantics (push/pop a list lets overlapping selections compose correctly without needing reference counts).
+
+</TechniqueHighlight>
+
+<TechniqueHighlight technique="Recursive polling with SPA cancellation token" difficulty="7/10">
+
+Adobe Target manipulates DOM nodes that haven't loaded yet — the debugger has to wait for an element before it can annotate it. Synchronous waiting isn't an option, and there's no event to listen for. The classic answer is a polling loop, but the version most codebases ship leaks on single-page-app navigations: a poll started on page A keeps firing forever after the user leaves for page B. This helper solves both — it recurses via `setTimeout` (which keeps the stack flat and the browser responsive) and carries a cancellation token (`pollIndex`) that compares against the current view's index on every iteration, terminating itself the moment the page changes underneath it.
+
+```js title="experiment-visibility/js/utag_sync.js#L150-L236"
+runPoll2: function (iden, selector, successFunc, failFunc, limit, duration, count, ind) {
+  var pollIndex = ind || this.pollIndex;
+
+  // Cancellation token — bail if the page we started on is no longer current.
+  if (this.viewIndex !== pollIndex) return;
+
+  var pollLimit    = limit    || 50;
+  var pollDuration = duration || 50;
+  var curCount     = count    || 1;
+  var condition    = false;
+
+  // Resolve a global path like "awo.tl.activities", a CSS selector, or a tag.
+  var firstChar = selector.charAt(0);
+  if (/^[a-z0-9]/i.test(firstChar)) {
+    var path = selector.split(".");
+    var obj = window;
+    for (var i = 0; i < path.length; i++) {
+      if (typeof obj[path[i]] !== "undefined") {
+        obj = obj[path[i]];
+        condition = true;
+      } else {
+        condition = false;
+        break;
+      }
+    }
+  } else if (/^[\.#\[]/i.test(firstChar)) {
+    condition = document.querySelectorAll(selector).length > 0;
+  }
+
+  if (condition) {
+    typeof successFunc === "function" && successFunc();
+  } else if (curCount >= pollLimit) {
+    typeof failFunc === "function" && failFunc();
+  } else {
+    // Recurse with incremented count, carrying the cancellation token forward.
+    setTimeout(function () {
+      awo.runPoll2(iden, selector, successFunc, failFunc, pollLimit, pollDuration, curCount + 1, pollIndex);
+    }, pollDuration);
+  }
+}
+```
+
+Three things compound to make this work. First, the recursion is *trampolined* through `setTimeout` — instead of `runPoll2` calling itself directly (which would grow the stack and freeze the UI), each recursive call is queued on the event loop, keeping the call stack at depth 1 indefinitely. Second, the cancellation token is passed *by value* to each recursion — so once `pollIndex` is set at the first call, every descendant inherits it; if the view changes mid-poll, the check at the top of the next iteration short-circuits the whole chain. Third, the resolver itself is polymorphic — the same helper handles JS object paths, CSS selectors, and tag names by dispatching on the first character of the selector string. The combination of trampolined recursion, generation-token cancellation, and polymorphic resolution is what nudges this into "advanced" territory — it's the same pattern React uses for stale-closure-safe `useEffect` cleanup, applied a decade earlier in plain ES5.
+
+</TechniqueHighlight>

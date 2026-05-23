@@ -1,5 +1,9 @@
 ---
 slug: product-guide-framework
+pullQuote: |
+  The pattern here — make engineering's output configurable so non-engineers can iterate without filing tickets — became my go-to lever. It shows up again in the Master Module case study, the personalization framework, and the in-house headless CMS. The tradeoff is upfront design cost; the payoff is a permanently shorter cycle time.
+
+  The demo shows the stop-motion implementation with live configuration controls, so you can adjust the framework's settings and see the output update in real time.
 ---
 
 ## Problem
@@ -18,14 +22,73 @@ The core ideas:
 
 One showcase implementation was a **stop-motion animation built from image sprites** — the framework powered the configuration, and a sprite-driven approach gave the look of stop-motion without the cost (or playback overhead) of video. The animation speed, intervals, intro behavior, preview window size, and fade behavior were all configurable via a simple settings form.
 
-## Outcome
+## Technical highlights
 
-- Product guides shipped on the design team's tempo, not engineering's
-- Engineering freed to work on higher-leverage problems
-- A reusable foundation that powered several AEO category-page experiences
+<TechniqueHighlight technique="Constrained random sampling (rejection with sliding-window memory)" difficulty="7/10">
 
-## What this says about how I build
+The naive way to animate "a random sprite, every couple seconds" — `Math.floor(Math.random() * count)` — looks alive for ten seconds and then betrays itself: the same sprite picked twice in a row, sprites animating off-screen while visible ones sit still, runs of repeated picks. The fix is rejection sampling: pick a random index, *evaluate it against constraints*, and re-roll if it fails. The constraints here are non-trivial — they encode viewport awareness and short-term memory, and the helper recurses until it lands a valid pick.
 
-The pattern here — make engineering's output configurable so non-engineers can iterate without filing tickets — became my go-to lever. It shows up again in the Master Module case study, the personalization framework, and the in-house headless CMS. The tradeoff is upfront design cost; the payoff is a permanently shorter cycle time.
+```js title="stop-motion/js/sprite_gallery.js#L400-L414"
+function checkNum() {
+  if (fullFunction) {
+    if (
+      activeAnimation < closestLeftAnimation ||                 // off-screen left
+      activeAnimation > closestRightAnimation ||                // off-screen right
+      (activeAnimation === previousAnimation &&
+        animationCount > 1 && windowView > 1) ||                // immediate repeat
+      previousAnimations.lastIndexOf(activeAnimation) !== -1    // in recent-history buffer
+    ) {
+      randomizeNumber();    // re-roll
+    } else {
+      loopAnimation();      // accept; play this one
+    }
+  } else {
+    // Fallback for IE8 (no Array#indexOf): only reject immediate repeats.
+    if (activeAnimation === previousAnimation && animationCount > 1 && windowView > 1) {
+      randomizeNumber();
+    } else {
+      loopAnimation();
+    }
+  }
+}
+```
 
-The demo shows the stop-motion implementation with live configuration controls, so you can adjust the framework's settings and see the output update in real time.
+Two pieces of state make it work. `closestLeftAnimation` / `closestRightAnimation` are recomputed on every scroll so "visible viewport" is always current. `previousAnimations` is a sliding window cleared every time it fills the visible-sprite count — so every visible sprite gets a turn before anything is allowed to repeat. The math is simple; what's hard is recognizing that "random" *isn't enough* and that constraint-based sampling produces a more believable kind of randomness. The terminating condition isn't a counter but the constraints themselves — with N visible sprites and a sliding window of length N, the search space is always non-empty.
+
+</TechniqueHighlight>
+
+<TechniqueHighlight technique="Ping-pong frame playback via parity counter" difficulty="6/10">
+
+Each sprite has a sprite-sheet of N frames stacked vertically. The naive playback would advance through all N, reset to frame 0, and repeat — which reads as a hard cut every cycle. Ping-pong playback plays the frames forward, then *reverses* the next time it's selected, with the position counter carrying across selections. The trick is a parity check: `hasPlayed % 2` chooses direction; `loopCount` tracks the current frame; `top_pos` accumulates as the sprite shifts. No reset, no jump, no flicker.
+
+```js title="stop-motion/js/sprite_gallery.js#L417-L447"
+function loopAnimation() {
+  if (animations[activeAnimation].hasPlayed % 2 === 0) {
+    // Forward direction — shift sprite up by one frame.
+    animations[activeAnimation].top_pos -= animationHeight;
+    $(animations[activeAnimation].sprite).css('top', animations[activeAnimation].top_pos + 'px');
+
+    if (animations[activeAnimation].loopCount < animations[activeAnimation].frame_count - 1) {
+      animations[activeAnimation].loopCount += 1;
+      animationLoop = setTimeout(loopAnimation, animationData.speed);
+    } else {
+      updateArrays();    // hasPlayed++ → next selection runs the reverse branch
+    }
+  } else {
+    // Reverse direction — same machinery in reverse.
+    animations[activeAnimation].top_pos += animationHeight;
+    $(animations[activeAnimation].sprite).css('top', animations[activeAnimation].top_pos + 'px');
+
+    if (animations[activeAnimation].loopCount > 1) {
+      animations[activeAnimation].loopCount -= 1;
+      animationLoop = setTimeout(loopAnimation, animationData.speed);
+    } else {
+      updateArrays();
+    }
+  }
+}
+```
+
+The recursion is trampolined through `setTimeout` so the call stack stays at depth 1 — same pattern as the SPA-safe polling in the experimentation work. The position state persists across selections, which is what makes the animation read as continuous rather than jittery: a sprite selected three times will play frames 0→N forward, then N→0 reverse, then 0→N forward again, with no visible reset.
+
+</TechniqueHighlight>
