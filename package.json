@@ -4,14 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "pnpm run lint && pnpm run typecheck && pnpm run test && next build",
-    "build:next": "next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "test": "NODE_ENV=test vitest run",
     "test:watch": "NODE_ENV=test vitest",
-    "test:coverage": "NODE_ENV=test vitest run --coverage"
+    "test:coverage": "NODE_ENV=test vitest run --coverage",
+    "verify": "pnpm run lint && pnpm run typecheck && pnpm run test"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
