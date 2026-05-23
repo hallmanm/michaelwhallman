@@ -1,5 +1,9 @@
 ---
 slug: word-count-validator
+pullQuote: |
+  Most of this case study's value is in what it *isn't*: an over-engineered solution. The win was understanding that the real bug in off-the-shelf word counters was the edge cases — and writing the smallest possible thing that handled them correctly. Tiny tools, used at the right moment, can prevent disproportionate amounts of customer-facing pain.
+
+  The demo enforces a 10-word limit (rather than 300) so you can see the live counter cross the threshold without writing a novel.
 ---
 
 ## Problem
@@ -14,14 +18,28 @@ I wrote a small **RegEx-based word counter** that did three things well:
 2. **`liveCount()`** — updated the UI on every keypress, changing color when the user crossed the limit so they got immediate feedback instead of a submit-time error.
 3. **`wordLimit()`** — a pure check used at submit time to enforce the constraint, sharing logic with the live counter so the two could never disagree.
 
-## Outcome
+## Technical highlights
 
-- Reliable input validation for a high-volume contest
-- Customers got real-time feedback while writing instead of getting bounced after composing
-- A small enough utility that it slotted into other forms across the marketing site
+This codebase is small (32 lines of user code) and the rating reflects that — there is one technique worth featuring and nothing here pushes higher than 4/10.
 
-## What this says about how I work
+<TechniqueHighlight technique="Regex alternation with multi-anchor boundaries" difficulty="4/10">
 
-Most of this case study's value is in what it *isn't*: an over-engineered solution. The win was understanding that the real bug in off-the-shelf word counters was the edge cases — and writing the smallest possible thing that handled them correctly. Tiny tools, used at the right moment, can prevent disproportionate amounts of customer-facing pain.
+A naive word counter splits on `\s+` and calls it a day — which over-counts entries with leading whitespace and under-counts entries ending in a single trailing letter or punctuation mark. The fix is a single regex that treats *three different things* as word boundaries: a whitespace run, an end-anchored word character, or an end-anchored punctuation mark.
 
-The demo enforces a 10-word limit (rather than 300) so you can see the live counter cross the threshold without writing a novel.
+```js title="regex/js/main.js#L5-L13"
+function wordCounter() {
+  var essay_val = essay.value;
+  var leftTrim = /^\s+/;
+  var trimmed = essay_val.replace(leftTrim, "");
+  var splitString = trimmed.split(/\s+|[\w\d]$|[.?!"]$/);
+  var wordCount = navigator.userAgent.indexOf("MSIE") > 0
+    ? splitString.length + 1
+    : splitString.length;
+
+  return wordCount;
+}
+```
+
+The trick is the `$` anchors inside an alternation. `\s+` matches anywhere, but `[\w\d]$` and `[.?!"]$` only match at the end of the string — so they only fire when the input lacks a normal trailing delimiter. That single pass replaces the if/else branching most word counters use, and the IE adjustment exists because IE's regex engine counted the end-anchored match differently from every other browser.
+
+</TechniqueHighlight>

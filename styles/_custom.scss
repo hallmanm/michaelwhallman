@@ -506,6 +506,318 @@
   }
 }
 
+// Tech-stack pill row in case study hero
+.tech-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1.5rem;
+
+  .tech-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.625rem;
+    background: rgba(13, 13, 13, 0.06);
+    border: 1px solid rgba(13, 13, 13, 0.1);
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--bs-secondary-color);
+    line-height: 1.4;
+  }
+}
+
+// Case study impact stats — reuses .impact-stat from home ImpactStrip
+.case-study-impact {
+  background: var(--bs-light);
+  border-top: 1px solid var(--bs-border-color);
+  border-bottom: 1px solid var(--bs-border-color);
+  padding: 3rem 0;
+
+  .eyebrow {
+    margin-bottom: 2rem;
+  }
+}
+
+// Story section — the main prose block
+.case-study-story {
+  padding: 5rem 0;
+
+  @media (max-width: 768px) {
+    padding: 3rem 0;
+  }
+}
+
+// Pull quote — the "what this says about how I work" content treatment
+.case-study-pullquote {
+  background: var(--bs-light);
+  border-top: 1px solid var(--bs-border-color);
+  border-bottom: 1px solid var(--bs-border-color);
+  padding: 5rem 0;
+
+  @media (max-width: 768px) {
+    padding: 3rem 0;
+  }
+
+  blockquote {
+    margin: 0;
+    padding: 0 1.25rem;
+    border-left: 3px solid var(--bs-dark);
+
+    p {
+      font-family: $font-family-serif;
+      font-size: 1.5rem;
+      line-height: 1.4;
+      font-style: italic;
+      color: var(--bs-body-color);
+      margin-bottom: 1rem;
+
+      @media (max-width: 768px) {
+        font-size: 1.25rem;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+// Code & Architecture — dark surface for technical highlights
+.case-study-highlights {
+  background: #161b22;
+  color: #cdd9e5;
+  padding: 5rem 0;
+  border-top: 1px solid #30363d;
+  border-bottom: 1px solid #30363d;
+
+  @media (max-width: 768px) {
+    padding: 3rem 0;
+  }
+
+  .eyebrow {
+    color: #768390;
+    margin-bottom: 0.75rem;
+  }
+
+  .display-headline {
+    color: #ffffff;
+    margin-bottom: 3rem;
+  }
+
+  a {
+    color: #539bf5;
+  }
+
+  code:not(pre code) {
+    background: rgba(99, 110, 123, 0.2);
+    color: #cdd9e5;
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+  }
+
+  strong { color: #ffffff; }
+  em { color: #adbac7; }
+}
+
+// Technique card — wraps each pick inside the dark Code & Architecture section
+.technique-card {
+  background: #1c2128;
+  border: 1px solid #30363d;
+  border-radius: 0.5rem;
+  padding: 1.5rem 1.75rem;
+  margin: 2rem 0;
+
+  @media (max-width: 768px) {
+    padding: 1.25rem;
+  }
+
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #30363d;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  &__field--rating {
+    margin-left: auto;
+    align-items: center;
+  }
+
+  &__label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #768390;
+  }
+
+  &__value {
+    font-size: 0.9375rem;
+    color: #ffffff;
+    font-weight: 500;
+  }
+
+  &__body {
+    p { color: #cdd9e5; }
+    p:last-child { margin-bottom: 0; }
+  }
+}
+
+// Difficulty gauge — speedometer-style SVG with start-up sweep animation
+.difficulty-gauge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+
+  svg {
+    display: block;
+    width: 88px;
+    height: auto;
+  }
+
+  &__label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--target-color, #768390);
+  }
+
+  &__needle {
+    transform-origin: 100px 100px;
+    transform: rotate(-90deg);
+  }
+
+  &__value {
+    font-family: var(--bs-font-monospace);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #768390;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.3s ease;
+
+    span {
+      font-size: 0.75em;
+      color: #768390;
+      margin-left: 0.0625em;
+    }
+  }
+}
+
+.difficulty-gauge.is-animating .difficulty-gauge__needle {
+  animation: gauge-sweep 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.difficulty-gauge.is-animating .difficulty-gauge__value {
+  animation: gauge-value-reveal 0.3s 1.05s forwards;
+}
+
+@keyframes gauge-sweep {
+  0% { transform: rotate(-90deg); }
+  100% { transform: rotate(var(--target-angle)); }
+}
+
+@keyframes gauge-value-reveal {
+  to { color: #ffffff; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .difficulty-gauge__value { color: #ffffff; }
+
+  .difficulty-gauge.is-animating .difficulty-gauge__needle {
+    animation: none;
+    transform: rotate(var(--target-angle));
+  }
+  .difficulty-gauge.is-animating .difficulty-gauge__value {
+    animation: none;
+  }
+}
+
+// MDX code blocks (rehype-pretty-code / Shiki)
+.case-study-body {
+  figure[data-rehype-pretty-code-figure] {
+    margin: 1.5rem 0;
+  }
+
+  figure[data-rehype-pretty-code-figure] [data-rehype-pretty-code-title] {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.4rem 0.875rem;
+    font-family: var(--bs-font-monospace);
+    font-size: 0.75rem;
+    color: var(--bs-secondary-color);
+    background: #1c2128;
+    border: 1px solid #30363d;
+    border-bottom: none;
+    border-top-left-radius: 0.375rem;
+    border-top-right-radius: 0.375rem;
+
+    .code-source-link {
+      display: inline-flex;
+      align-items: center;
+      color: #ffffff;
+      opacity: 0.85;
+      transition: opacity 0.15s, color 0.15s;
+      text-decoration: none;
+
+      &:hover,
+      &:focus-visible {
+        opacity: 1;
+        color: #58a6ff;
+      }
+    }
+  }
+
+  pre {
+    margin: 0;
+    padding: 1rem 1.25rem;
+    background: #22272e;
+    border: 1px solid #30363d;
+    border-radius: 0.375rem;
+    overflow-x: auto;
+    font-size: 0.8125rem;
+    line-height: 1.55;
+
+    code {
+      background: transparent;
+      padding: 0;
+      color: inherit;
+      font-family: var(--bs-font-monospace);
+      font-size: inherit;
+    }
+
+    [data-line] {
+      display: inline-block;
+      width: 100%;
+    }
+  }
+
+  figure[data-rehype-pretty-code-figure] [data-rehype-pretty-code-title] + pre {
+    border-top-left-radius: 0;
+  }
+
+  :not(pre) > code {
+    padding: 0.125rem 0.375rem;
+    background: rgba(13, 13, 13, 0.06);
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+    color: inherit;
+  }
+}
+
 // Utility
 .text-balance {
   text-wrap: balance;
