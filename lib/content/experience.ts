@@ -172,7 +172,8 @@ export const experience: ExperienceEntry[] = [
     location: "Pittsburgh, PA",
     workStyle: "in-office",
     highlights: [
-      "Maintained marketing content across AEO brands.",
+      "Created first mobile experience.",
+      "Created a custom application helping digitize the Gumberg Library's collections."
     ],
   },
 ];
